@@ -347,10 +347,8 @@ global_costmap:
 # file & provide full path to map below. If CLI map configuration or launch default is provided, that will be used.
 map_server:
   ros__parameters:
-    # yaml_filename: ""
     introspection_mode: "disabled"
-    yaml_filename: "/home/hungyu/work_ws/map.yaml" # 補上這一行
-    use_sim_time: True
+    use_sim_time: false
 
 keepout_filter_mask_server:
   ros__parameters:
