@@ -154,7 +154,7 @@ controller_server:
       visualize: true
       publish_optimal_trajectory: true
       regenerate_noises: true
-      motion_model: "diff_drive"
+      motion_model: "DiffDrive"
       diff_drive:
         plugin: "mppi::DiffDriveMotionModel"
       TrajectoryVisualizer:
@@ -249,7 +249,7 @@ local_costmap:
       filters: ["keepout_filter"]
       keepout_filter:
         plugin: "nav2_costmap_2d::KeepoutFilter"
-        enabled: KEEPOUT_ZONE_ENABLED
+        enabled: false
         filter_info_topic: "keepout_costmap_filter_info"
         override_lethal_cost: true
         lethal_override_cost: 200
@@ -303,13 +303,13 @@ global_costmap:
       filters: ["keepout_filter", "speed_filter"]
       keepout_filter:
         plugin: "nav2_costmap_2d::KeepoutFilter"
-        enabled: KEEPOUT_ZONE_ENABLED
+        enabled: false
         filter_info_topic: "keepout_costmap_filter_info"
         override_lethal_cost: true
         lethal_override_cost: 200
       speed_filter:
         plugin: "nav2_costmap_2d::SpeedFilter"
-        enabled: SPEED_ZONE_ENABLED
+        enabled: false
         filter_info_topic: "speed_costmap_filter_info"
         speed_limit_topic: "speed_limit"
       obstacle_layer:
@@ -347,6 +347,7 @@ global_costmap:
 # file & provide full path to map below. If CLI map configuration or launch default is provided, that will be used.
 map_server:
   ros__parameters:
+    yaml_filename: ""
     introspection_mode: "disabled"
     use_sim_time: false
 

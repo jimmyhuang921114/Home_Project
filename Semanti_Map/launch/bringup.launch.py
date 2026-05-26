@@ -3,7 +3,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
@@ -31,7 +31,7 @@ def generate_launch_description():
     declare_use_sim_time = DeclareLaunchArgument(
         'use_sim_time',
         default_value='false',
-        description='使用模擬時鐘 (Gazebo) 時設為 true',
+        description='使用模擬時鐘 (Gazebo) 時設為 ',
     )
     declare_rviz_config = DeclareLaunchArgument(
         'rviz_config',
@@ -42,6 +42,11 @@ def generate_launch_description():
         'use_rviz',
         default_value='true',
         description='設為 false 可略過 RViz2',
+    )
+    declare_use_nav2 = DeclareLaunchArgument(
+        'use_nav2',
+        default_value='true',
+        description='設為 false 可略過 Nav2 (定位 + 導航)',
     )
 
     # ── Nav2 定位 (map_server + AMCL) ─────────────────────────────────────────
@@ -54,6 +59,7 @@ def generate_launch_description():
             'params_file':  LaunchConfiguration('nav2_params_file'),
             'use_sim_time': LaunchConfiguration('use_sim_time'),
         }.items(),
+        condition=IfCondition(LaunchConfiguration('use_nav2')),
     )
 
     # ── Nav2 導航堆疊 ─────────────────────────────────────────────────────────
@@ -65,6 +71,7 @@ def generate_launch_description():
             'params_file':  LaunchConfiguration('nav2_params_file'),
             'use_sim_time': LaunchConfiguration('use_sim_time'),
         }.items(),
+        condition=IfCondition(LaunchConfiguration('use_nav2')),
     )
 
     # ── 語意地圖節點 ──────────────────────────────────────────────────────────
@@ -93,6 +100,7 @@ def generate_launch_description():
         declare_use_sim_time,
         declare_rviz_config,
         declare_use_rviz,
+        declare_use_nav2,
         localization,
         navigation,
         semantic_map_node,
