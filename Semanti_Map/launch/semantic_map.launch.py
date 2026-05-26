@@ -7,7 +7,7 @@ import os
 def generate_launch_description():
     config = os.path.join(
         get_package_share_directory('Semanti_Map'),
-        'params.yaml'
+        'config', 'params.yaml'
     )
 
     return LaunchDescription([
