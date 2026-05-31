@@ -6,6 +6,12 @@
 ros2 launch Semanti_Map bringup.launch.py
 # Semanti_Map
 
+使用模擬器時：
+
+```bash
+ros2 launch Semanti_Map bringup.launch.py use_sim_time:=true
+```
+
 ROS 2 套件，負責語意地圖的 **TF 投影層**：接收 GroundingDINO 偵測結果，結合深度影像與相機內參將 2D pixel 座標投影為 map frame 3D 座標，轉發給下游地圖整合節點處理。
 
 ## 系統架構
@@ -73,11 +79,7 @@ source install/setup.bash
 
 ```
 
-使用模擬器時：
 
-```bash
-ros2 launch Semanti_Map bringup.launch.py use_sim_time:=true
-```
 
 覆蓋地圖或參數：
 
