@@ -1,3 +1,9 @@
+## 啟動
+
+### 一鍵啟動（Nav2 + 語意地圖 + RViz2）
+
+```bash
+ros2 launch Semanti_Map bringup.launch.py
 # Semanti_Map
 
 ROS 2 套件，負責語意地圖的 **TF 投影層**：接收 GroundingDINO 偵測結果，結合深度影像與相機內參將 2D pixel 座標投影為 map frame 3D 座標，轉發給下游地圖整合節點處理。
@@ -64,12 +70,7 @@ colcon build --packages-select Semanti_Map
 source install/setup.bash
 ```
 
-## 啟動
 
-### 一鍵啟動（Nav2 + 語意地圖 + RViz2）
-
-```bash
-ros2 launch Semanti_Map bringup.launch.py
 ```
 
 使用模擬器時：
