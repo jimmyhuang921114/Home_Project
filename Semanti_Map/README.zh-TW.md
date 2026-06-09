@@ -1,6 +1,22 @@
+## 啟動
+
+### 一鍵啟動（Nav2 + 語意地圖 + RViz2）
+
+```bash
+ros2 launch Semanti_Map bringup.launch.py
 # Semanti_Map
 
+<<<<<<< HEAD
 ROS 2 套件，負責語意地圖的 **TF 投影層**：接收 YOLO 偵測結果，結合深度影像與相機內參將 2D pixel 座標投影為 map frame 3D 座標，轉發給下游地圖整合節點。
+=======
+使用模擬器時：
+
+```bash
+ros2 launch Semanti_Map bringup.launch.py use_sim_time:=true
+```
+
+ROS 2 套件，負責語意地圖的 **TF 投影層**：接收 GroundingDINO 偵測結果，結合深度影像與相機內參將 2D pixel 座標投影為 map frame 3D 座標，轉發給下游地圖整合節點處理。
+>>>>>>> 87000aa918ba9ccbd01885deee1176eeb18fefe3
 
 ## 系統架構
 
@@ -62,9 +78,25 @@ colcon build --packages-select Semanti_Map
 source install/setup.bash
 ```
 
-## 啟動
 
+<<<<<<< HEAD
 ### 單獨啟動
+=======
+```
+
+
+
+覆蓋地圖或參數：
+
+```bash
+ros2 launch Semanti_Map bringup.launch.py \
+  map:=/path/to/other_map.yaml \
+  nav2_params_file:=/path/to/nav2_params.yaml \
+  use_rviz:=false
+```
+
+### 僅啟動語意地圖節點
+>>>>>>> 87000aa918ba9ccbd01885deee1176eeb18fefe3
 
 ```bash
 ros2 launch Semanti_Map semantic_map.launch.py
