@@ -2,7 +2,7 @@ import os
 from glob import glob
 from setuptools import find_packages, setup
 
-package_name = 'main_policy'
+package_name = 'yolo'
 
 setup(
     name=package_name,
@@ -19,7 +19,7 @@ setup(
     zip_safe=True,
     maintainer='hungyu',
     maintainer_email='doubleradiate@gmail.com',
-    description='Semantic map integrator node',
+    description='TODO: Package description',
     license='TODO: License declaration',
     extras_require={
         'test': [
@@ -28,10 +28,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'map_integrator_node = main_policy.map_integrator_node:main',
-            'map_builder_node = main_policy.map_builder_node:main',
-            'nav_service_node = main_policy.nav_service_node:main',
-            'waypoint_tour_node = main_policy.waypoint_tour_node:main',
+            'yolo_detect_node = yolo.yolo_detect:main',
         ],
     },
 )

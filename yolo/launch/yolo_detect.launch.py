@@ -7,7 +7,7 @@ from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
-    pkg = get_package_share_directory('Semanti_Map')
+    pkg = get_package_share_directory('yolo')
     config = os.path.join(pkg, 'config', 'params.yaml')
 
     return LaunchDescription([
@@ -17,19 +17,22 @@ def generate_launch_description():
             description='使用模擬時鐘時設為 true',
         ),
         DeclareLaunchArgument(
-            'sem_params_file',
-            default_value=config,
-            description='語意地圖節點參數 YAML 路徑',
+            'model_path',
+            default_value='yolov8n.pt',
+            description='YOLO 模型路徑（相對路徑由 ultralytics 自動下載）',
         ),
 
         Node(
-            package='Semanti_Map',
-            executable='semantic_map_node',
-            name='semantic_map_node',
+            package='yolo',
+            executable='yolo_detect_node',
+            name='yolo_detect_node',
             output='screen',
             parameters=[
-                LaunchConfiguration('sem_params_file'),
-                {'use_sim_time': LaunchConfiguration('use_sim_time')},
+                config,
+                {
+                    'use_sim_time': LaunchConfiguration('use_sim_time'),
+                    'model_path': LaunchConfiguration('model_path'),
+                },
             ],
         ),
     ])

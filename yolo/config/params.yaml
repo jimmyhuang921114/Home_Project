@@ -1,0 +1,6 @@
+yolo_detect_node:
+  ros__parameters:
+    image_topic: "/realsense/rgb"
+    model_path: "yolov8n.pt"          # 相對路徑由 ultralytics 自動下載；或填絕對路徑
+    confidence_threshold: 0.35
+    min_period_s: 0.10                 # 最短推理間隔（秒），避免頻率過高

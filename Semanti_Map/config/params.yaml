@@ -1,11 +1,10 @@
 semantic_map_node:
   ros__parameters:
-    use_sim_time: false
-    detection_topic: "/grounding_dino/detections"
+    detection_topic: "/yolo/detections"
     depth_topic: "/realsense/depth"
     camera_info_topic: "/realsense/camera_info"
     amcl_topic: "/amcl_pose"
-    camera_frame: "Camera_OmniVision_OV9782_Color"
+    camera_frame: ""   # 空字串 = 自動從 camera_info.header.frame_id 取得
     map_frame: "map"
     merge_distance: 0.5
     ema_alpha: 0.3

@@ -34,7 +34,7 @@ class SemanticMapNode(Node):
         super().__init__('semantic_map_node')
 
         # ---------- 參數 ----------
-        self.declare_parameter('detection_topic', '/grounding_dino/detections')
+        self.declare_parameter('detection_topic', '/yolo/detections')
         self.declare_parameter('depth_topic', '/realsense/depth')
         self.declare_parameter('camera_info_topic', '/realsense/camera_info')
         self.declare_parameter('raw_detections_topic', '/semantic_map/raw_detections')
@@ -48,7 +48,7 @@ class SemanticMapNode(Node):
         self.depth_topic = self.get_parameter('depth_topic').value
         self.camera_info_topic = self.get_parameter('camera_info_topic').value
         self.raw_detections_topic = self.get_parameter('raw_detections_topic').value
-        self.camera_frame = self.get_parameter('camera_frame').value
+        self._camera_frame_override = self.get_parameter('camera_frame').value
         self.map_frame = self.get_parameter('map_frame').value
         self.min_confidence = self.get_parameter('min_confidence').value
         self.depth_scale = self.get_parameter('depth_scale').value
@@ -75,7 +75,7 @@ class SemanticMapNode(Node):
         self.get_logger().info(
             f"SemanticMapNode (TF 投影層) 已啟動。\n"
             f"  use_sim_time   = {use_sim_time}\n"
-            f"  camera_frame   = {self.camera_frame}\n"
+            f"  camera_frame   = {'auto (from camera_info)' if not self._camera_frame_override else self._camera_frame_override}\n"
             f"  map_frame      = {self.map_frame}\n"
             f"  → {self.raw_detections_topic}"
         )
@@ -142,6 +142,12 @@ class SemanticMapNode(Node):
         fx, fy, cx, cy = k[0], k[4], k[2], k[5]
         stamp = self.get_clock().now().to_msg()
 
+        # 優先使用 camera_info 的 frame_id，若為空則 fallback 到參數
+        camera_frame = cam_info.header.frame_id or self._camera_frame_override
+        if not camera_frame:
+            self.get_logger().warn("camera_info.header.frame_id 為空且未設定 camera_frame 參數", once=True)
+            return
+
         results = []
         for det in data.get('detections', []):
             score = float(det.get('score', 0.0))
@@ -162,13 +168,13 @@ class SemanticMapNode(Node):
 
             try:
                 pt_in = PointStamped()
-                pt_in.header.frame_id = self.camera_frame
+                pt_in.header.frame_id = camera_frame
                 pt_in.header.stamp = stamp
                 pt_in.point.x, pt_in.point.y, pt_in.point.z = cam_x, cam_y, cam_z
 
                 tf = self.tf_buffer.lookup_transform(
                     self.map_frame,
-                    self.camera_frame,
+                    camera_frame,
                     rclpy.time.Time(),
                     timeout=Duration(seconds=0.5),
                 )
@@ -176,7 +182,7 @@ class SemanticMapNode(Node):
 
             except tf2_ros.LookupException as e:
                 self.get_logger().warn(
-                    f"TF LookupException: {self.camera_frame} → {self.map_frame} | {e}",
+                    f"TF LookupException: {camera_frame} → {self.map_frame} | {e}",
                     throttle_duration_sec=3.0,
                 )
                 return
