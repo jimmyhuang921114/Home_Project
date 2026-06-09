@@ -35,12 +35,4 @@ ros2 run main_policy waypoint_tour_node
 
 ```
 =======
-一鍵啟動（Nav2 + 語意地圖 + RViz2）
-ros2 launch Semanti_Map bringup.launch.py
-# Semanti_Map
 
-使用模擬器時：
-
-```bash
-ros2 launch Semanti_Map bringup.launch.py use_sim_time:=true
->>>>>>> 87000aa918ba9ccbd01885deee1176eeb18fefe3
