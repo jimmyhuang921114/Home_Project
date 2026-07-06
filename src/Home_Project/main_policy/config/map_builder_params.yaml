@@ -17,7 +17,7 @@ map_builder_node:
                                     # 建議值：房間四角觀測時設 2~3
 
     # 持久化
-    map_save_path: "/home/hungyu/work_ws/semantic_map.json"
+    map_save_path: "data/semantic_map.json"
     auto_save_interval: 60.0
 
     # 發布

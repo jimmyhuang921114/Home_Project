@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOME_WS="/home/jimmy/work_ws/home_project_ws"
-SWAGGER_WS="/home/jimmy/work_ws/SWAGGER"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+HOME_WS="${HOME_PROJECT_ROOT:-${PROJECT_ROOT}}"
+SWAGGER_WS="${SWAGGER_WS:-${PROJECT_ROOT}/../SWAGGER}"
 
 MAP_YAML="${HOME_WS}/config/map.yaml"
 OUT_DIR="${HOME_WS}/config/generated/swagger_official"

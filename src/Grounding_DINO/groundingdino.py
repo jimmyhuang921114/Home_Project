@@ -12,7 +12,27 @@ from transformers import AutoProcessor
 from transformers import AutoModelForZeroShotObjectDetection
 
 
-DEFAULT_VIDEO = "/workspace/visual/src/test_video/YTDown_YouTube_Redrow-s-The-Mere-Home-Tour-POV-Full-Wal_Media_mwUJnTCrGxU_002_720p.mp4"
+def get_project_root() -> Path:
+    env = os.environ.get("HOME_PROJECT_ROOT")
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / "src").exists():
+            return parent
+    return p.parents[2]
+
+
+PROJECT_ROOT = get_project_root()
+DEFAULT_VIDEO = str(
+    PROJECT_ROOT
+    / "data"
+    / "test_video"
+    / "YTDown_YouTube_Redrow-s-The-Mere-Home-Tour-POV-Full-Wal_Media_mwUJnTCrGxU_002_720p.mp4"
+)
+DEFAULT_OUTPUT = str(PROJECT_ROOT / "output" / "grounding_home_objects.mp4")
+DEFAULT_COORD_OUTPUT = str(PROJECT_ROOT / "output" / "grounding_home_objects_coords.txt")
 
 DEFAULT_PROMPT = (
     "person . chair . table . sofa . couch . bed . pillow . blanket . "
@@ -31,8 +51,8 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--video", type=str, default=DEFAULT_VIDEO)
-    parser.add_argument("--output", type=str, default="/workspace/output/grounding_home_objects.mp4")
-    parser.add_argument("--coord-output", type=str, default="/workspace/output/grounding_home_objects_coords.txt")
+    parser.add_argument("--output", type=str, default=DEFAULT_OUTPUT)
+    parser.add_argument("--coord-output", type=str, default=DEFAULT_COORD_OUTPUT)
 
     parser.add_argument("--model", type=str, default="IDEA-Research/grounding-dino-tiny")
     parser.add_argument("--prompt", type=str, default=DEFAULT_PROMPT)

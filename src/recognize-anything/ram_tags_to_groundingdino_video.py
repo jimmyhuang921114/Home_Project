@@ -16,14 +16,29 @@ from PIL import Image
 from transformers import AutoProcessor, AutoModelForZeroShotObjectDetection
 
 
-DEFAULT_VIDEO = (
-    "/home/jimmy/work_ws/visual/src/test_video/"
-    "YTDown_YouTube_Redrow-s-The-Mere-Home-Tour-POV-Full-Wal_Media_mwUJnTCrGxU_002_720p.mp4"
+def get_project_root() -> Path:
+    env = os.environ.get("HOME_PROJECT_ROOT")
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / "src").exists():
+            return parent
+    return p.parents[2]
+
+
+PROJECT_ROOT = get_project_root()
+DEFAULT_VIDEO = str(
+    PROJECT_ROOT
+    / "data"
+    / "test_video"
+    / "YTDown_YouTube_Redrow-s-The-Mere-Home-Tour-POV-Full-Wal_Media_mwUJnTCrGxU_002_720p.mp4"
 )
 
-DEFAULT_OUTPUT = "/home/jimmy/work_ws/visual/output/ram_groundingdino_home_objects.mp4"
-DEFAULT_COORD_OUTPUT = "/home/jimmy/work_ws/visual/output/ram_groundingdino_home_objects_coords.csv"
-DEFAULT_PROMPT_LOG = "/home/jimmy/work_ws/visual/output/ram_groundingdino_prompts.csv"
+DEFAULT_OUTPUT = str(PROJECT_ROOT / "output" / "ram_groundingdino_home_objects.mp4")
+DEFAULT_COORD_OUTPUT = str(PROJECT_ROOT / "output" / "ram_groundingdino_home_objects_coords.csv")
+DEFAULT_PROMPT_LOG = str(PROJECT_ROOT / "output" / "ram_groundingdino_prompts.csv")
 
 
 # 太抽象、顏色、場景形容詞，通常不適合直接餵給 GroundingDINO
@@ -91,7 +106,7 @@ def import_ram_builder(ram_mode: str):
     except Exception as e:
         raise RuntimeError(
             "找不到 RAM/RAM++ 模組。請確認你是在 recognize-anything 專案根目錄執行，"
-            "例如：cd /home/jimmy/work_ws/visual/src/recognize-anything"
+            f"例如：cd {PROJECT_ROOT / 'src' / 'recognize-anything'}"
         ) from e
 
 

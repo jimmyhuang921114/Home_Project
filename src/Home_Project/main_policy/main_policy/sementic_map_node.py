@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import math
+import os
 import threading
 import time
 from pathlib import Path
@@ -742,10 +743,20 @@ class WaypointNavToPointStepService(Node):
 
 
 def main():
+    env_root = os.environ.get("HOME_PROJECT_ROOT")
+    if env_root:
+        project_root = Path(env_root).expanduser().resolve()
+    else:
+        p = Path(__file__).resolve()
+        project_root = next((parent for parent in p.parents if (parent / "src").exists()), p.parents[4])
+    default_yaml = (
+        project_root / "src" / "web_nav_control" / "runtime" / "waypoints" / "nav2_waypoints.yaml"
+    )
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--yaml",
-        default="/home/jimmy/work_ws/home_project_ws/config/swagger_regen_reachable_20260623_014740/nav2_waypoints_swagger_reachable.yaml",
+        default=str(default_yaml),
     )
     parser.add_argument("--auto-start", action="store_true")
     parser.add_argument("--start-delay", type=float, default=3.0)

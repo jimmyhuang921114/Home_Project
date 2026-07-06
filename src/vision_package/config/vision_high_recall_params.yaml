@@ -9,9 +9,9 @@ ram_node:
     continuous_inference: false
     latest_image_timeout_s: 5.0
 
-    ram_repo_path: /workspace/visual/src/recognize-anything
+    ram_repo_path: ""
     model_type: ram_plus
-    pretrained_path: /workspace/visual/src/recognize-anything/pretrained/ram_plus_swin_large_14m.pth
+    pretrained_path: ""
     vit: swin_l
     image_size: 384
 

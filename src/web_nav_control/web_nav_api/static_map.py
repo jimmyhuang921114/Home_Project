@@ -11,6 +11,18 @@ except Exception:  # pragma: no cover
     yaml = None
 
 
+def get_project_root() -> Path:
+    env = os.environ.get('HOME_PROJECT_ROOT')
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / 'src').exists():
+            return parent
+    return p.parents[3]
+
+
 def _read_png_size(path: Path) -> Tuple[int, int]:
     with path.open('rb') as f:
         sig = f.read(8)
@@ -88,7 +100,8 @@ def _load_gray_image_optional(path: Path):
     return None
 
 
-RUNTIME_MAP_DIR = Path('/home/jimmy/work_ws/home_project_ws/src/web_nav_control/runtime/map')
+PROJECT_ROOT = get_project_root()
+RUNTIME_MAP_DIR = PROJECT_ROOT / 'src' / 'web_nav_control' / 'runtime' / 'map'
 RUNTIME_MAP_YAML = RUNTIME_MAP_DIR / 'map.yaml'
 
 
@@ -125,7 +138,7 @@ class StaticMapProvider:
         env_path = os.environ.get('WEB_NAV_STATIC_MAP_YAML')
         if env_path:
             return Path(env_path).expanduser()
-        return Path('/home/jimmy/work_ws/home_project_ws/config/map.yaml')
+        return PROJECT_ROOT / 'config' / 'map.yaml'
 
     def reload(self) -> None:
         self.yaml_path = self._select_yaml_path()

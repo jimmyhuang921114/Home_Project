@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import ast
 import math
+import os
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +15,18 @@ try:
     import cv2
 except Exception:
     cv2 = None
+
+
+def get_project_root() -> Path:
+    env = os.environ.get("HOME_PROJECT_ROOT")
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / "src").exists():
+            return parent
+    return p.parents[1]
 
 
 def parse_xy(data: dict[str, Any]) -> tuple[float, float]:
@@ -258,12 +271,13 @@ def draw_debug(
 
 
 def main() -> None:
+    project_root = get_project_root()
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--graph-dir", required=True)
     parser.add_argument(
         "--map-yaml",
-        default="/home/jimmy/work_ws/home_project_ws/config/map.yaml",
+        default=str(project_root / "config" / "map.yaml"),
     )
     parser.add_argument("--out-yaml", default="")
     parser.add_argument("--debug-png", default="")

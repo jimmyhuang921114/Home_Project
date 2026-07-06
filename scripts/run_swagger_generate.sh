@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOME_WS="/home/jimmy/work_ws/home_project_ws"
-SWAGGER_DIR="/home/jimmy/work_ws/SWAGGER"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+HOME_WS="${HOME_PROJECT_ROOT:-${PROJECT_ROOT}}"
+SWAGGER_DIR="${SWAGGER_DIR:-${PROJECT_ROOT}/../SWAGGER}"
 
 MAP_PNG="${HOME_WS}/config/map.png"
 MAP_YAML="${HOME_WS}/config/map.yaml"
@@ -30,13 +32,26 @@ echo "=========================================="
 
 # ===== 修 numba / coverage 衝突 =====
 NUMBA_COV="$(
-find \
-  /home/work/.local/lib/python3.10/site-packages \
-  /home/jimmy/.local/lib/python3.10/site-packages \
-  /usr/local/lib/python3.10/dist-packages \
-  /usr/lib/python3/dist-packages \
-  -path "*/numba/misc/coverage_support.py" \
-  -print 2>/dev/null | head -n 1 || true
+python3 - <<'PY' | while IFS= read -r site_dir; do
+import site
+import sys
+paths = []
+for getter in (site.getusersitepackages, site.getsitepackages):
+    try:
+        value = getter()
+    except Exception:
+        continue
+    if isinstance(value, str):
+        paths.append(value)
+    else:
+        paths.extend(value)
+paths.extend(sys.path)
+for path in dict.fromkeys(paths):
+    if path:
+        print(path)
+PY
+  find "$site_dir" -path "*/numba/misc/coverage_support.py" -print 2>/dev/null
+done | head -n 1 || true
 )"
 
 if [ -n "$NUMBA_COV" ]; then

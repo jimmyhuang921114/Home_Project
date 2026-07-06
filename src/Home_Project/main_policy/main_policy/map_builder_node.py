@@ -33,6 +33,7 @@ import math
 import os
 from collections import defaultdict
 from dataclasses import dataclass, field
+from pathlib import Path
 from threading import Event, Lock
 from typing import Dict, List, Optional, Tuple
 
@@ -46,6 +47,18 @@ from geometry_msgs.msg import Point, Vector3
 from std_msgs.msg import ColorRGBA, String
 from std_srvs.srv import Trigger
 from visualization_msgs.msg import Marker, MarkerArray
+
+
+def get_project_root() -> Path:
+    env = os.environ.get('HOME_PROJECT_ROOT')
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / 'src').exists():
+            return parent
+    return p.parents[4]
 
 
 def _parse_detections(data: dict) -> list:
@@ -122,6 +135,7 @@ class MapBuilderNode(Node):
 
     def __init__(self) -> None:
         super().__init__('map_builder_node')
+        project_root = get_project_root()
 
         self.declare_parameter('raw_detections_topic', '/grounding_dino/objects_3d_json')
         self.declare_parameter('map_frame', 'map')
@@ -131,7 +145,7 @@ class MapBuilderNode(Node):
         self.declare_parameter('max_std_dev', 0.15)
         self.declare_parameter('merge_distance', 0.50)
         self.declare_parameter('min_viewpoints', 2)
-        self.declare_parameter('map_save_path', '/home/hungyu/work_ws/semantic_map.json')
+        self.declare_parameter('map_save_path', 'data/semantic_map.json')
         self.declare_parameter('auto_save_interval', 60.0)
         self.declare_parameter('publish_rate', 2.0)
 
@@ -144,7 +158,10 @@ class MapBuilderNode(Node):
         self._max_std_dev      = float(p('max_std_dev').value)
         self._merge_dist       = float(p('merge_distance').value)
         self._min_viewpoints   = int(p('min_viewpoints').value)
-        self._save_path        = str(p('map_save_path').value)
+        save_path = Path(str(p('map_save_path').value)).expanduser()
+        if not save_path.is_absolute():
+            save_path = project_root / save_path
+        self._save_path        = str(save_path)
         self._publish_rate     = float(p('publish_rate').value)
 
         # 視角快照（confirm 累積，finalize 消費）

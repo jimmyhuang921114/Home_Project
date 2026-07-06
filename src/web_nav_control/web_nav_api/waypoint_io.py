@@ -11,14 +11,27 @@ import yaml
 from .models import Waypoint
 
 
-RUNTIME_WAYPOINT_DIR = Path('/home/jimmy/work_ws/home_project_ws/src/web_nav_control/runtime/waypoints')
+def get_project_root() -> Path:
+    env = os.environ.get('HOME_PROJECT_ROOT')
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / 'src').exists():
+            return parent
+    return p.parents[3]
+
+
+PROJECT_ROOT = get_project_root()
+RUNTIME_WAYPOINT_DIR = PROJECT_ROOT / 'src' / 'web_nav_control' / 'runtime' / 'waypoints'
 RUNTIME_WAYPOINT_YAML = RUNTIME_WAYPOINT_DIR / 'nav2_waypoints.yaml'
 
 DEFAULT_WAYPOINT_PATHS = [
-    '/home/jimmy/work_ws/home_project_ws/src/Semanti_Map/config/nav2_waypoints_margin_060.yaml',
-    '/home/jimmy/work_ws/home_project_ws/src/Home_Project/config/nav2_waypoints_margin_060.yaml',
-    '/home/jimmy/work_ws/home_project_ws/config/nav2_waypoints.yaml',
-    '/home/jimmy/work_ws/home_project_ws/src/web_nav_control/config/nav2_waypoints.yaml',
+    PROJECT_ROOT / 'src' / 'Semanti_Map' / 'config' / 'nav2_waypoints_margin_060.yaml',
+    PROJECT_ROOT / 'src' / 'Home_Project' / 'config' / 'nav2_waypoints_margin_060.yaml',
+    PROJECT_ROOT / 'config' / 'nav2_waypoints.yaml',
+    PROJECT_ROOT / 'src' / 'web_nav_control' / 'config' / 'nav2_waypoints.yaml',
 ]
 
 
@@ -32,7 +45,7 @@ def waypoint_search_paths() -> List[str]:
     env_path = os.environ.get('WEB_NAV_WAYPOINT_YAML')
     if env_path:
         paths.append(env_path)
-    paths.extend(DEFAULT_WAYPOINT_PATHS)
+    paths.extend(str(path) for path in DEFAULT_WAYPOINT_PATHS)
     return paths
 
 

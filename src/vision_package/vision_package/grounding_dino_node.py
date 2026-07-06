@@ -7,8 +7,7 @@ grounding_dino_node.py
 真正的 GroundingDINO 偵測 node。
 
 重點：
-1. 這支一定要放在：
-   /home/jimmy/work_ws/visual/src/vision_package/vision_package/grounding_dino_node.py
+1. 這支位於 vision_package/vision_package/grounding_dino_node.py
 
 2. 它會提供 service：
    /grounding_dino/detect_once

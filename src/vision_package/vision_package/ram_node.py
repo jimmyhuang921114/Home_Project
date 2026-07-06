@@ -9,8 +9,7 @@ Flow:
 
 Notes:
 - This node expects the Recognize-Anything repository/package to be installed or importable.
-- If it is not installed as a Python package, set ram_repo_path to your local repo path,
-  for example: /workspace/visual/src/recognize-anything
+- If it is not installed as a Python package, set ram_repo_path to your local repo path.
 - Set pretrained_path to your RAM or RAM++ checkpoint.
 """
 
@@ -82,9 +81,24 @@ def split_ram_result(result: Any) -> List[str]:
     return tags
 
 
+def get_project_root() -> Path:
+    env = os.environ.get("HOME_PROJECT_ROOT")
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / "src").exists():
+            return parent
+    return p.parents[4]
+
+
 class RamTagNode(Node):
     def __init__(self):
         super().__init__("ram_node")
+        project_root = get_project_root()
+        default_ram_repo = project_root / "src" / "recognize-anything"
+        default_pretrained = project_root / "models" / "ram" / "ram_plus_swin_large_14m.pth"
 
         self.declare_parameter("image_topic", "/realsense/rgb")
         self.declare_parameter("tags_topic", "/ram/tags")
@@ -99,12 +113,12 @@ class RamTagNode(Node):
         self.declare_parameter("latest_image_timeout_s", 5.0)
 
         # RAM repo path. Use this when recognize-anything is cloned but not pip-installed.
-        self.declare_parameter("ram_repo_path", "/workspace/visual/src/recognize-anything")
+        self.declare_parameter("ram_repo_path", str(default_ram_repo))
 
         # RAM model settings.
         # model_type: ram_plus or ram
         self.declare_parameter("model_type", "ram_plus")
-        self.declare_parameter("pretrained_path", "/workspace/visual/src/recognize-anything/pretrained/ram_plus_swin_large_14m.pth")
+        self.declare_parameter("pretrained_path", str(default_pretrained))
         self.declare_parameter("vit", "swin_l")
         self.declare_parameter("image_size", 384)
 
@@ -132,9 +146,9 @@ class RamTagNode(Node):
         self.continuous_inference = bool(self.get_parameter("continuous_inference").value)
         self.latest_image_timeout_s = float(self.get_parameter("latest_image_timeout_s").value)
 
-        self.ram_repo_path = str(self.get_parameter("ram_repo_path").value)
+        self.ram_repo_path = str(self.get_parameter("ram_repo_path").value or default_ram_repo)
         self.model_type = str(self.get_parameter("model_type").value).lower().strip()
-        self.pretrained_path = str(self.get_parameter("pretrained_path").value)
+        self.pretrained_path = str(self.get_parameter("pretrained_path").value or default_pretrained)
         self.vit = str(self.get_parameter("vit").value)
         self.image_size = int(self.get_parameter("image_size").value)
 

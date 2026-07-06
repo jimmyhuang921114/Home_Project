@@ -23,6 +23,18 @@ from semantic_nav_interfaces.srv import NavToPoint
 from robot_object_retrieval_ros.srv import ImportSemanticMap
 
 
+def get_project_root() -> Path:
+    env = os.environ.get("HOME_PROJECT_ROOT")
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / "src").exists():
+            return parent
+    return p.parents[4]
+
+
 class RobotTaskOrchestrator(Node):
     """
     Main Policy / Task Orchestrator
@@ -47,13 +59,18 @@ class RobotTaskOrchestrator(Node):
 
     def __init__(self):
         super().__init__("robot_task_orchestrator_node")
+        project_root = get_project_root()
+        default_waypoint_yaml = (
+            project_root / "src" / "web_nav_control" / "runtime" / "waypoints" / "nav2_waypoints.yaml"
+        )
+        default_records_path = project_root / "data" / "main_policy_records.jsonl"
 
         # ============================================================
         # Parameters
         # ============================================================
         self.declare_parameter(
             "waypoint_yaml",
-            "/home/jimmy/work_ws/home_project_ws/src/Semanti_Map/config/nav2_waypoints_margin_060.yaml",
+            str(default_waypoint_yaml),
         )
 
         self.declare_parameter("auto_start", False)
@@ -80,7 +97,7 @@ class RobotTaskOrchestrator(Node):
 
         self.declare_parameter(
             "records_save_path",
-            "/home/jimmy/work_ws/home_project_ws/data/main_policy_records.jsonl",
+            str(default_records_path),
         )
 
         # Database import through /semantic_map/import

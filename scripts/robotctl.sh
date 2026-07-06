@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
-WS="/home/jimmy/work_ws/home_project_ws"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+WS="${HOME_PROJECT_ROOT:-${PROJECT_ROOT}}"
 RETRIEVAL="$WS/src/robot_object_retrieval-main"
 RECORDS="$WS/data/main_policy_records.jsonl"
 

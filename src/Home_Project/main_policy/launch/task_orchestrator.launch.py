@@ -1,12 +1,33 @@
 #!/usr/bin/env python3
 
+import os
+from pathlib import Path
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
 
+def get_project_root() -> Path:
+    env = os.environ.get("HOME_PROJECT_ROOT")
+    if env:
+        return Path(env).expanduser().resolve()
+
+    p = Path(__file__).resolve()
+    for parent in p.parents:
+        if (parent / "src").exists():
+            return parent
+    return p.parents[4]
+
+
 def generate_launch_description():
+    project_root = get_project_root()
+    default_waypoint_yaml = (
+        project_root / "src" / "web_nav_control" / "runtime" / "waypoints" / "nav2_waypoints.yaml"
+    )
+    default_records_path = project_root / "data" / "main_policy_records.jsonl"
+
     return LaunchDescription([
         DeclareLaunchArgument(
             "use_sim_time",
@@ -16,7 +37,7 @@ def generate_launch_description():
 
         DeclareLaunchArgument(
             "waypoint_yaml",
-            default_value="/home/jimmy/work_ws/home_project_ws/src/Semanti_Map/config/nav2_waypoints_margin_060.yaml",
+            default_value=str(default_waypoint_yaml),
             description="Waypoint YAML path",
         ),
 
@@ -63,7 +84,7 @@ def generate_launch_description():
                     "map_confirm_service": "/semantic_map/confirm",
                     "map_confirm_timeout_s": 10.0,
 
-                    "records_save_path": "/home/jimmy/work_ws/home_project_ws/data/main_policy_records.jsonl",
+                    "records_save_path": str(default_records_path),
                 }
             ],
         ),

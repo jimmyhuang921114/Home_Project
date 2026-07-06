@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-HOME_WS="/home/jimmy/work_ws/home_project_ws"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+HOME_WS="${HOME_PROJECT_ROOT:-${PROJECT_ROOT}}"
 
 # ===== SWAGGER graph 生成參數 =====
 SAFETY="${SAFETY:-0.25}"
@@ -99,7 +101,7 @@ echo "xdg-open \"$OUT_DIR/debug_nav2_waypoints.png\""
 echo
 echo "[NEXT] Test waypoint node:"
 echo "source /opt/ros/humble/setup.bash"
-echo "source /home/jimmy/work_ws/home_project_ws/install/setup.bash"
+echo "source \"${HOME_WS}/install/setup.bash\""
 
 if [ "$SEMANTIC_SCAN" = "1" ] || [ "$SEMANTIC_SCAN" = "true" ] || [ "$SEMANTIC_SCAN" = "TRUE" ]; then
   echo "ros2 run main_policy sementic_map_node --yaml \"$OUT_DIR/nav2_waypoints_swagger.yaml\" --use-yaw --success-delay 3.0"
