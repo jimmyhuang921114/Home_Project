@@ -1,0 +1,6 @@
+
+# env / secrets
+*.env
+.env
+.env.*
+robot_object.env
