@@ -1,0 +1,16 @@
+# robot_object_retrieval / semantic-map runtime deps
+psycopg[binary]==3.2.9
+python-dotenv==1.0.1
+PyYAML>=6,<7
+textual>=0.89.1,<2.0
+
+# DB / agent / CLI helpers
+pgvector>=0.3.6,<0.5
+SQLAlchemy>=2.0,<3
+asyncpg>=0.29,<1
+httpx>=0.27,<1
+pydantic>=2,<3
+rich>=13,<15
+ollama>=0.4,<1
+requests>=2.31,<3
+numpy>=1.26,<2
