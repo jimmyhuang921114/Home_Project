@@ -1,0 +1,215 @@
+{
+  "frame_id": "map",
+  "next_id": 19,
+  "objects": [
+    {
+      "id": "wall lamp_0",
+      "class": "wall lamp",
+      "position": {
+        "x": 2.8547789542909756,
+        "y": -1.6540639343650017,
+        "z": 3.9447251243159416
+      },
+      "confidence": 0.8077866435050964,
+      "observe_count": 668
+    },
+    {
+      "id": "curtain_1",
+      "class": "curtain",
+      "position": {
+        "x": 0.6733575428000682,
+        "y": -1.1616855731927727,
+        "z": 7.228758251151374
+      },
+      "confidence": 0.8271899223327637,
+      "observe_count": 668
+    },
+    {
+      "id": "living room_2",
+      "class": "living room",
+      "position": {
+        "x": -0.008261588538962736,
+        "y": -0.016688116435683614,
+        "z": 7.276294669847561
+      },
+      "confidence": 0.741706371307373,
+      "observe_count": 668
+    },
+    {
+      "id": "couch_3",
+      "class": "couch",
+      "position": {
+        "x": 0.7820701748634523,
+        "y": 0.12878355940762248,
+        "z": 1.927475501296856
+      },
+      "confidence": 0.6620461344718933,
+      "observe_count": 668
+    },
+    {
+      "id": "glass table round table_4",
+      "class": "glass table round table",
+      "position": {
+        "x": 0.7471146941003605,
+        "y": 0.32554157526090766,
+        "z": 2.1045484580956013
+      },
+      "confidence": 0.5771398544311523,
+      "observe_count": 619
+    },
+    {
+      "id": "chair_5",
+      "class": "chair",
+      "position": {
+        "x": 0.7855113169546442,
+        "y": 0.23713130023519663,
+        "z": 2.3792865334943216
+      },
+      "confidence": 0.4379991888999939,
+      "observe_count": 616
+    },
+    {
+      "id": "window_6",
+      "class": "window",
+      "position": {
+        "x": -1.8040199124276146,
+        "y": -0.8262989777794492,
+        "z": 3.223247442769606
+      },
+      "confidence": 0.5111916065216064,
+      "observe_count": 1144
+    },
+    {
+      "id": "chair_7",
+      "class": "chair",
+      "position": {
+        "x": 1.5439236621687553,
+        "y": 0.4880075749202743,
+        "z": 4.152719027279572
+      },
+      "confidence": 0.41064023971557617,
+      "observe_count": 14
+    },
+    {
+      "id": "glass table round table_8",
+      "class": "glass table round table",
+      "position": {
+        "x": 1.1559313649899352,
+        "y": 0.5240999181629251,
+        "z": 2.867841405355081
+      },
+      "confidence": 0.5738721489906311,
+      "observe_count": 45
+    },
+    {
+      "id": "furniture_9",
+      "class": "furniture",
+      "position": {
+        "x": 0.8706900690806962,
+        "y": 0.27820881792723473,
+        "z": 2.237949675101328
+      },
+      "confidence": 0.3597997725009918,
+      "observe_count": 7
+    },
+    {
+      "id": "table_10",
+      "class": "table",
+      "position": {
+        "x": 0.7450714154074983,
+        "y": 0.33034919492556325,
+        "z": 2.10082068435195
+      },
+      "confidence": 0.7753653526306152,
+      "observe_count": 2
+    },
+    {
+      "id": "sofa couch_11",
+      "class": "sofa couch",
+      "position": {
+        "x": 0.7952841494013795,
+        "y": 0.12222412709508193,
+        "z": 1.9075959312089408
+      },
+      "confidence": 0.6782219409942627,
+      "observe_count": 2
+    },
+    {
+      "id": "book_12",
+      "class": "book",
+      "position": {
+        "x": -1.4430363390068908,
+        "y": 0.30372581068297994,
+        "z": 2.8892872498250273
+      },
+      "confidence": 0.5335231423377991,
+      "observe_count": 2
+    },
+    {
+      "id": "cabinet_13",
+      "class": "cabinet",
+      "position": {
+        "x": -1.3367239477804156,
+        "y": 0.5091838442033265,
+        "z": 2.61579698985968
+      },
+      "confidence": 0.4926466643810272,
+      "observe_count": 2
+    },
+    {
+      "id": "book_14",
+      "class": "book",
+      "position": {
+        "x": 0.7476561032358141,
+        "y": 0.047697930270851036,
+        "z": 2.2167118523457483
+      },
+      "confidence": 0.4372105300426483,
+      "observe_count": 2
+    },
+    {
+      "id": "door window_15",
+      "class": "door window",
+      "position": {
+        "x": 0.6158691280716149,
+        "y": -1.1467993622439792,
+        "z": 7.269573035723749
+      },
+      "confidence": 0.3967705965042114,
+      "observe_count": 2
+    },
+    {
+      "id": "chair_16",
+      "class": "chair",
+      "position": {
+        "x": 0.7485780465381,
+        "y": 0.5050237813461534,
+        "z": 4.039006547983941
+      },
+      "confidence": 0.36810052394866943,
+      "observe_count": 2
+    },
+    {
+      "id": "television_17",
+      "class": "television",
+      "position": {
+        "x": -1.8027252261433402,
+        "y": -0.8620714289644085,
+        "z": 3.151730118614497
+      },
+      "confidence": 0.808421790599823,
+      "observe_count": 3
+    },
+    {
+      "id": "glass table_18",
+      "class": "glass table",
+      "position": {
+        "x": 1.1413639469396304,
+        "y": 0.5192844466092729,
+        "z": 2.8511785462301837
+      },
+      "confidence": 0.6293498873710632,
+      "observe_count": 4
+    }
+  ]
+}

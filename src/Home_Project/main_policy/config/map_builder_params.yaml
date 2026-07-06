@@ -1,0 +1,24 @@
+map_builder_node:
+  ros__parameters:
+    raw_detections_topic: "/grounding_dino/objects_3d_json"  # vision_package 直接輸出
+    map_frame: "map"
+
+    # 每次 confirm 的定點收集設定
+    collect_frames: 10              # 收幾幀
+    collect_timeout: 5.0            # 最長等待（秒）
+
+    # 單視角品質門檻
+    min_obs_per_viewpoint: 3        # 叢集最少觀測數
+    max_std_dev: 0.15               # 位置標準差上限（m）
+
+    # 跨視角融合門檻
+    merge_distance: 0.50            # 空間叢集合併半徑（m）
+    min_viewpoints: 2               # 物件至少要在幾個視角出現才寫入地圖
+                                    # 建議值：房間四角觀測時設 2~3
+
+    # 持久化
+    map_save_path: "/home/hungyu/work_ws/semantic_map.json"
+    auto_save_interval: 60.0
+
+    # 發布
+    publish_rate: 2.0

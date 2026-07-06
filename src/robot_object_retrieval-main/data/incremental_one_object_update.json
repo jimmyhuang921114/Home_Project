@@ -1,0 +1,17 @@
+{
+  "frame_id": "map",
+  "next_id": 21,
+  "objects": [
+    {
+      "id": "codex_test_cube_0",
+      "class": "codex test cube",
+      "position": {
+        "x": 10.5,
+        "y": 0.4,
+        "z": 8.9
+      },
+      "confidence": 0.75,
+      "observe_count": 2
+    }
+  ]
+}

@@ -1,0 +1,2283 @@
+{
+  "frame_id": "map",
+  "next_id": 207,
+  "objects": [
+    {
+      "id": "room_0_table_93",
+      "position": {
+        "x": 5.688233375549316,
+        "y": 1.4636008739471436,
+        "z": -1.1737769842147827
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "table"
+    },
+    {
+      "id": "room_0_book_92",
+      "position": {
+        "x": 4.758913516998291,
+        "y": -3.0995407104492188,
+        "z": -0.8895769119262695
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_0_window_91",
+      "position": {
+        "x": 3.4531314373016357,
+        "y": -5.8584394454956055,
+        "z": 0.2979464828968048
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_book_90",
+      "position": {
+        "x": 5.869284152984619,
+        "y": -0.4577028751373291,
+        "z": -0.8226473927497864
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_0_wall_89",
+      "position": {
+        "x": 6.768088340759277,
+        "y": 0.9647404551506042,
+        "z": -0.1363489031791687
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_0_ceiling_88",
+      "position": {
+        "x": 2.9238429069519043,
+        "y": 1.0850392580032349,
+        "z": 1.2408456802368164
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "ceiling"
+    },
+    {
+      "id": "room_0_lamp_87",
+      "position": {
+        "x": 5.900754928588867,
+        "y": 0.11149950325489044,
+        "z": -0.482855886220932
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_0_blanket_86",
+      "position": {
+        "x": 3.60343074798584,
+        "y": -0.62168288230896,
+        "z": -1.1603636741638184
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blanket"
+    },
+    {
+      "id": "room_0_book_85",
+      "position": {
+        "x": 0.703204870223999,
+        "y": 0.6361446976661682,
+        "z": -0.8197753429412842
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_0_pillar_84",
+      "position": {
+        "x": 6.841337203979492,
+        "y": -2.4463582038879395,
+        "z": -0.13822108507156372
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillar"
+    },
+    {
+      "id": "room_0_lamp_83",
+      "position": {
+        "x": 4.068528175354004,
+        "y": 0.77363520860672,
+        "z": 1.216975212097168
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_0_wall-plug_82",
+      "position": {
+        "x": 3.3259427547454834,
+        "y": -2.83488130569458,
+        "z": -1.0526494979858398
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_0_undefined_81",
+      "position": {
+        "x": 1.5596096515655518,
+        "y": -0.4577544331550598,
+        "z": 1.1944823265075684
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_wall-plug_80",
+      "position": {
+        "x": 3.387317419052124,
+        "y": -6.285772323608398,
+        "z": -1.0551471710205078
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_0_candle_79",
+      "position": {
+        "x": 0.5001121759414673,
+        "y": 0.5933016538619995,
+        "z": -0.7088125348091125
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "candle"
+    },
+    {
+      "id": "room_0_window_38",
+      "position": {
+        "x": 6.898849010467529,
+        "y": 2.114814281463623,
+        "z": 0.29216209053993225
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_blinds_34",
+      "position": {
+        "x": 3.4862239360809326,
+        "y": -5.845804214477539,
+        "z": 0.2877112925052643
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_0_wall_33",
+      "position": {
+        "x": -1.1020437479019165,
+        "y": -2.9218435287475586,
+        "z": -0.13218265771865845
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_0_wall-plug_31",
+      "position": {
+        "x": 3.3038535118103027,
+        "y": 0.5684264898300171,
+        "z": -1.053517460823059
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_0_blinds_30",
+      "position": {
+        "x": 3.481886386871338,
+        "y": -1.6476666927337646,
+        "z": 0.2851715087890625
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_0_window_29",
+      "position": {
+        "x": 3.4866156578063965,
+        "y": -3.1550586223602295,
+        "z": 0.29944947361946106
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_window_28",
+      "position": {
+        "x": 3.470811367034912,
+        "y": -4.701024055480957,
+        "z": 0.29893213510513306
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_table_27",
+      "position": {
+        "x": 2.165635347366333,
+        "y": -0.7164435386657715,
+        "z": -1.205454707145691
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "table"
+    },
+    {
+      "id": "room_0_undefined_24",
+      "position": {
+        "x": 2.9788732528686523,
+        "y": -2.200911521911621,
+        "z": -0.960777759552002
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_window_26",
+      "position": {
+        "x": 6.871413230895996,
+        "y": 0.9537822008132935,
+        "z": 0.29574769735336304
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_floor_25",
+      "position": {
+        "x": 2.924893617630005,
+        "y": 1.0832855701446533,
+        "z": -1.504934310913086
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "floor"
+    },
+    {
+      "id": "room_0_table_7",
+      "position": {
+        "x": 1.5931334495544434,
+        "y": -1.7120342254638672,
+        "z": -1.1684554815292358
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "table"
+    },
+    {
+      "id": "room_0_cushion_32",
+      "position": {
+        "x": 2.898697853088379,
+        "y": 2.436905860900879,
+        "z": -0.8351442217826843
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_undefined_14",
+      "position": {
+        "x": -1.0820674896240234,
+        "y": -1.2452335357666016,
+        "z": 0.007032411172986031
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_blinds_21",
+      "position": {
+        "x": 6.865367889404297,
+        "y": 2.2003722190856934,
+        "z": 0.2904554009437561
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_0_blinds_22",
+      "position": {
+        "x": 3.4682350158691406,
+        "y": -4.698087215423584,
+        "z": 0.28512823581695557
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_0_wall_23",
+      "position": {
+        "x": -0.8708552718162537,
+        "y": -0.24383127689361572,
+        "z": -0.5379356145858765
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_0_undefined_20",
+      "position": {
+        "x": 1.4107439517974854,
+        "y": -1.7375080585479736,
+        "z": -0.7531796097755432
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_cabinet_2",
+      "position": {
+        "x": 1.0765811204910278,
+        "y": 0.6414549946784973,
+        "z": -1.1800391674041748
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cabinet"
+    },
+    {
+      "id": "room_0_blinds_19",
+      "position": {
+        "x": 6.878231048583984,
+        "y": 0.9663187265396118,
+        "z": 0.2882477939128876
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_0_undefined_37",
+      "position": {
+        "x": 6.592104911804199,
+        "y": 2.4076900482177734,
+        "z": -0.46962982416152954
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_door_36",
+      "position": {
+        "x": -1.099832534790039,
+        "y": 0.1946532130241394,
+        "z": -0.4063965678215027
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "door"
+    },
+    {
+      "id": "room_0_indoor-plant_35",
+      "position": {
+        "x": 3.278290271759033,
+        "y": -2.236027956008911,
+        "z": -0.6473953127861023
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "indoor-plant"
+    },
+    {
+      "id": "room_0_switch_16",
+      "position": {
+        "x": -1.106547236442566,
+        "y": -1.2387042045593262,
+        "z": -0.3430991768836975
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "switch"
+    },
+    {
+      "id": "room_0_window_17",
+      "position": {
+        "x": 6.698709964752197,
+        "y": -1.4261374473571777,
+        "z": 0.29768866300582886
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_cushion_18",
+      "position": {
+        "x": 1.069622278213501,
+        "y": -2.9654324054718018,
+        "z": -0.8125462532043457
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_book_12",
+      "position": {
+        "x": 3.5562944412231445,
+        "y": 0.8792105913162231,
+        "z": -1.0213524103164673
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_0_cushion_13",
+      "position": {
+        "x": 4.656482219696045,
+        "y": -2.0501937866210938,
+        "z": -0.8060446977615356
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_lamp_6",
+      "position": {
+        "x": -0.455865740776062,
+        "y": -3.3729677200317383,
+        "z": -0.8235347270965576
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_0_table_11",
+      "position": {
+        "x": 3.7623934745788574,
+        "y": 0.774434506893158,
+        "z": -1.2633039951324463
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "table"
+    },
+    {
+      "id": "room_0_undefined_1",
+      "position": {
+        "x": -0.7978674173355103,
+        "y": -0.36866676807403564,
+        "z": 1.230025291442871
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_book_3",
+      "position": {
+        "x": -0.5621670484542847,
+        "y": 0.7580715417861938,
+        "z": -0.7881592512130737
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_0_blinds_15",
+      "position": {
+        "x": 6.856917381286621,
+        "y": -0.444224089384079,
+        "z": 0.29221704602241516
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_0_sofa_9",
+      "position": {
+        "x": 3.6246674060821533,
+        "y": -0.8960235118865967,
+        "z": -1.0596339702606201
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "sofa"
+    },
+    {
+      "id": "room_0_book_4",
+      "position": {
+        "x": -0.5681354403495789,
+        "y": 0.7569994926452637,
+        "z": -0.7565977573394775
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_0_table_10",
+      "position": {
+        "x": 5.724732398986816,
+        "y": 0.5972018241882324,
+        "z": -1.207785964012146
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "table"
+    },
+    {
+      "id": "room_0_cushion_5",
+      "position": {
+        "x": 5.232475280761719,
+        "y": 0.8722485303878784,
+        "z": -0.828188419342041
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_basket_75",
+      "position": {
+        "x": 2.7212719917297363,
+        "y": -2.3506906032562256,
+        "z": -1.3356192111968994
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "basket"
+    },
+    {
+      "id": "room_0_cushion_8",
+      "position": {
+        "x": -0.34748339653015137,
+        "y": -4.551185607910156,
+        "z": -0.8052225112915039
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_stool_39",
+      "position": {
+        "x": 2.364738941192627,
+        "y": 0.18378287553787231,
+        "z": -1.262150526046753
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "stool"
+    },
+    {
+      "id": "room_0_lamp_40",
+      "position": {
+        "x": 0.8744245767593384,
+        "y": -0.3985443711280823,
+        "z": 1.2131459712982178
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_0_stool_41",
+      "position": {
+        "x": 1.7759442329406738,
+        "y": 0.6290670037269592,
+        "z": -1.2724769115447998
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "stool"
+    },
+    {
+      "id": "room_0_pot_43",
+      "position": {
+        "x": 3.419156551361084,
+        "y": -1.2988483905792236,
+        "z": -0.872452974319458
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pot"
+    },
+    {
+      "id": "room_0_window_42",
+      "position": {
+        "x": 3.4806787967681885,
+        "y": -0.496671199798584,
+        "z": 0.2940981984138489
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_wall-plug_44",
+      "position": {
+        "x": 3.44803786277771,
+        "y": -6.103785991668701,
+        "z": -1.0546499490737915
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_0_vase_45",
+      "position": {
+        "x": 1.811134696006775,
+        "y": 0.6324602365493774,
+        "z": -0.5897533297538757
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vase"
+    },
+    {
+      "id": "room_0_pillar_46",
+      "position": {
+        "x": 3.155449390411377,
+        "y": 1.1129885911941528,
+        "z": -0.1395666003227234
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillar"
+    },
+    {
+      "id": "room_0_undefined_47",
+      "position": {
+        "x": 1.0841859579086304,
+        "y": 0.8525300025939941,
+        "z": 0.0061082541942596436
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_wall_48",
+      "position": {
+        "x": 1.040736436843872,
+        "y": 0.8649912476539612,
+        "z": -0.1405547857284546
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_0_lamp_49",
+      "position": {
+        "x": 2.1186511516571045,
+        "y": -2.195549488067627,
+        "z": 1.217909336090088
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_0_blinds_50",
+      "position": {
+        "x": 3.49100661277771,
+        "y": -0.495009183883667,
+        "z": 0.2824277877807617
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_0_undefined_51",
+      "position": {
+        "x": 3.6370811462402344,
+        "y": 0.5648961067199707,
+        "z": 1.2325389385223389
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_undefined_52",
+      "position": {
+        "x": 2.3372397422790527,
+        "y": 1.1421903371810913,
+        "z": 1.2107436656951904
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_undefined_53",
+      "position": {
+        "x": 3.8298301696777344,
+        "y": 1.599043607711792,
+        "z": 1.232825517654419
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_undefined_54",
+      "position": {
+        "x": 2.977017641067505,
+        "y": -1.5637953281402588,
+        "z": -0.9981081485748291
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_plant-stand_55",
+      "position": {
+        "x": 3.8613271713256836,
+        "y": -1.0472698211669922,
+        "z": -0.9978308081626892
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "plant-stand"
+    },
+    {
+      "id": "room_0_wall-plug_56",
+      "position": {
+        "x": 3.315624952316284,
+        "y": -6.040618419647217,
+        "z": -1.0529836416244507
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_0_wall_57",
+      "position": {
+        "x": 3.3834381103515625,
+        "y": -2.8866019248962402,
+        "z": -0.14178550243377686
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_0_blinds_58",
+      "position": {
+        "x": 3.4849579334259033,
+        "y": -3.1653623580932617,
+        "z": 0.28729918599128723
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_0_book_59",
+      "position": {
+        "x": 3.5286216735839844,
+        "y": 1.0043644905090332,
+        "z": -1.0032480955123901
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_0_rug_60",
+      "position": {
+        "x": 3.7137844562530518,
+        "y": 0.931975781917572,
+        "z": -1.491914987564087
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "rug"
+    },
+    {
+      "id": "room_0_window_61",
+      "position": {
+        "x": -1.1341185569763184,
+        "y": -0.5711194276809692,
+        "z": -0.34061652421951294
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_window_62",
+      "position": {
+        "x": 3.4838619232177734,
+        "y": -1.6258794069290161,
+        "z": 0.2964273989200592
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_0_picture_63",
+      "position": {
+        "x": -1.0982228517532349,
+        "y": -3.6704905033111572,
+        "z": 0.06646397709846497
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "picture"
+    },
+    {
+      "id": "room_0_vent_64",
+      "position": {
+        "x": 5.3462629318237305,
+        "y": 0.7733529806137085,
+        "z": 1.231198787689209
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vent"
+    },
+    {
+      "id": "room_0_plate_65",
+      "position": {
+        "x": 0.015289731323719025,
+        "y": 1.5605432987213135,
+        "z": -0.831804633140564
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "plate"
+    },
+    {
+      "id": "room_0_plate_66",
+      "position": {
+        "x": 3.3196685314178467,
+        "y": -1.9000849723815918,
+        "z": -1.3147082328796387
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "plate"
+    },
+    {
+      "id": "room_0_undefined_67",
+      "position": {
+        "x": 1.42566978931427,
+        "y": -0.877171516418457,
+        "z": 1.2277569770812988
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_0_vent_68",
+      "position": {
+        "x": 1.6199541091918945,
+        "y": 1.1752339601516724,
+        "z": 1.2292197942733765
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vent"
+    },
+    {
+      "id": "room_0_cushion_69",
+      "position": {
+        "x": 5.842083930969238,
+        "y": 0.35215848684310913,
+        "z": -0.8879706859588623
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_cushion_70",
+      "position": {
+        "x": 3.6524181365966797,
+        "y": -2.04148530960083,
+        "z": -0.8201528787612915
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_cushion_71",
+      "position": {
+        "x": 1.7884796857833862,
+        "y": -2.204585075378418,
+        "z": -0.8278908729553223
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_cushion_72",
+      "position": {
+        "x": 5.863083362579346,
+        "y": 1.4358785152435303,
+        "z": -0.8952337503433228
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cushion"
+    },
+    {
+      "id": "room_0_chair_73",
+      "position": {
+        "x": 5.758645057678223,
+        "y": 1.2254526615142822,
+        "z": -0.9617530703544617
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_0_chair_74",
+      "position": {
+        "x": 5.709177494049072,
+        "y": 0.2725111246109009,
+        "z": -0.9655821323394775
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_0_sofa_77",
+      "position": {
+        "x": 3.8245434761047363,
+        "y": 2.529953956604004,
+        "z": -1.0665242671966553
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "sofa"
+    },
+    {
+      "id": "room_0_lamp_78",
+      "position": {
+        "x": 5.9001054763793945,
+        "y": 2.052091121673584,
+        "z": 1.2277796268463135
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_1_ceiling_56",
+      "position": {
+        "x": -1.802013635635376,
+        "y": 0.7394409775733948,
+        "z": 1.3089816570281982
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "ceiling"
+    },
+    {
+      "id": "room_1_window_55",
+      "position": {
+        "x": -2.938215732574463,
+        "y": 3.046160936355591,
+        "z": 0.40212997794151306
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_1_indoor-plant_54",
+      "position": {
+        "x": -3.7675788402557373,
+        "y": 2.752371311187744,
+        "z": 0.07797235995531082
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "indoor-plant"
+    },
+    {
+      "id": "room_1_lamp_53",
+      "position": {
+        "x": -1.209463357925415,
+        "y": 2.9605250358581543,
+        "z": 1.3165385723114014
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_1_lamp_52",
+      "position": {
+        "x": 0.7710179090499878,
+        "y": 3.161518096923828,
+        "z": -0.3468819856643677
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_1_vase_51",
+      "position": {
+        "x": -4.02510404586792,
+        "y": 2.1896419525146484,
+        "z": -0.3664880692958832
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vase"
+    },
+    {
+      "id": "room_1_undefined_50",
+      "position": {
+        "x": -4.82682991027832,
+        "y": 0.4875958561897278,
+        "z": 0.15713541209697723
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_1_wall-plug_49",
+      "position": {
+        "x": 1.1006088256835938,
+        "y": 0.7511144876480103,
+        "z": -0.9453610181808472
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_1_pillow_48",
+      "position": {
+        "x": 1.0416417121887207,
+        "y": 2.447293758392334,
+        "z": -0.5921354293823242
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillow"
+    },
+    {
+      "id": "room_1_blanket_46",
+      "position": {
+        "x": -2.7950823307037354,
+        "y": 3.646109104156494,
+        "z": -1.1215441226959229
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blanket"
+    },
+    {
+      "id": "room_1_lamp_45",
+      "position": {
+        "x": 2.028911828994751,
+        "y": 0.6992658972740173,
+        "z": -0.3509019613265991
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_1_wall-plug_44",
+      "position": {
+        "x": -1.4713901281356812,
+        "y": 0.5057170391082764,
+        "z": -0.944167971611023
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_1_lamp_43",
+      "position": {
+        "x": -0.6437987685203552,
+        "y": 1.5400831699371338,
+        "z": 1.3229002952575684
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_1_plate_42",
+      "position": {
+        "x": -4.598811149597168,
+        "y": 0.8530975580215454,
+        "z": -0.5225403308868408
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "plate"
+    },
+    {
+      "id": "room_1_panel_41",
+      "position": {
+        "x": 0.7658798694610596,
+        "y": 3.6723222732543945,
+        "z": -0.23215004801750183
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "panel"
+    },
+    {
+      "id": "room_1_lamp_40",
+      "position": {
+        "x": -0.7511460185050964,
+        "y": 0.27229633927345276,
+        "z": 1.3207634687423706
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_1_pillow_39",
+      "position": {
+        "x": -1.498216986656189,
+        "y": 1.6657488346099854,
+        "z": -0.6013112664222717
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillow"
+    },
+    {
+      "id": "room_1_wall_38",
+      "position": {
+        "x": -4.748193264007568,
+        "y": -1.1356130838394165,
+        "z": -1.3029042482376099
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_1_picture_12",
+      "position": {
+        "x": -0.016817569732666016,
+        "y": -0.9252214431762695,
+        "z": 0.1891605257987976
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "picture"
+    },
+    {
+      "id": "room_1_comforter_10",
+      "position": {
+        "x": 0.018936574459075928,
+        "y": 1.2667523622512817,
+        "z": -0.944075345993042
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "comforter"
+    },
+    {
+      "id": "room_1_wall-plug_16",
+      "position": {
+        "x": 1.0679566860198975,
+        "y": 0.9087909460067749,
+        "z": -0.9466903209686279
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_1_pillow_9",
+      "position": {
+        "x": 1.2840406894683838,
+        "y": 1.54402756690979,
+        "z": -0.5790102481842041
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillow"
+    },
+    {
+      "id": "room_1_nightstand_8",
+      "position": {
+        "x": 1.9156765937805176,
+        "y": 0.9398664236068726,
+        "z": -1.0362424850463867
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "nightstand"
+    },
+    {
+      "id": "room_1_floor_1",
+      "position": {
+        "x": -1.8709197044372559,
+        "y": 0.8075632452964783,
+        "z": -1.3401923179626465
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "floor"
+    },
+    {
+      "id": "room_1_pillow_3",
+      "position": {
+        "x": 1.1139295101165771,
+        "y": 1.3392961025238037,
+        "z": -0.5704697370529175
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillow"
+    },
+    {
+      "id": "room_1_book_35",
+      "position": {
+        "x": -4.529062271118164,
+        "y": 1.1096160411834717,
+        "z": -0.4596818685531616
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_1_wall_2",
+      "position": {
+        "x": -4.8433403968811035,
+        "y": 0.6831255555152893,
+        "z": -0.03214532136917114
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_1_blinds_15",
+      "position": {
+        "x": 1.2115237712860107,
+        "y": 1.650413990020752,
+        "z": 0.3826156258583069
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_1_blanket_11",
+      "position": {
+        "x": -0.26866012811660767,
+        "y": 1.7250100374221802,
+        "z": -0.9645092487335205
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blanket"
+    },
+    {
+      "id": "room_1_wall_5",
+      "position": {
+        "x": -1.8998048305511475,
+        "y": -0.7817286849021912,
+        "z": -0.031323254108428955
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_1_wall-plug_14",
+      "position": {
+        "x": -1.6490647792816162,
+        "y": -0.09064078330993652,
+        "z": -0.9439334869384766
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_1_pillow_13",
+      "position": {
+        "x": 0.9543847441673279,
+        "y": 1.6653361320495605,
+        "z": -0.644013524055481
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillow"
+    },
+    {
+      "id": "room_1_pillow_7",
+      "position": {
+        "x": 1.6013360023498535,
+        "y": 1.492065191268921,
+        "z": -0.5590375065803528
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillow"
+    },
+    {
+      "id": "room_1_basket_4",
+      "position": {
+        "x": -3.2920775413513184,
+        "y": 3.027655601501465,
+        "z": -1.1379474401474
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "basket"
+    },
+    {
+      "id": "room_1_undefined_24",
+      "position": {
+        "x": -2.415773630142212,
+        "y": 3.9844744205474854,
+        "z": -0.3684479594230652
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_1_door_6",
+      "position": {
+        "x": -0.07493209838867188,
+        "y": 4.831784725189209,
+        "z": -0.2885388731956482
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "door"
+    },
+    {
+      "id": "room_1_blinds_27",
+      "position": {
+        "x": -2.691772937774658,
+        "y": 3.267446756362915,
+        "z": 0.40457388758659363
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_1_book_17",
+      "position": {
+        "x": -4.518701076507568,
+        "y": 1.1429965496063232,
+        "z": -0.49254024028778076
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_1_book_19",
+      "position": {
+        "x": -4.437954902648926,
+        "y": 1.3650777339935303,
+        "z": -0.5334753394126892
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "book"
+    },
+    {
+      "id": "room_1_pillow_18",
+      "position": {
+        "x": 0.8318275809288025,
+        "y": 2.3440616130828857,
+        "z": -0.6271660923957825
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "pillow"
+    },
+    {
+      "id": "room_1_rug_20",
+      "position": {
+        "x": -0.9829460978507996,
+        "y": 0.8158562183380127,
+        "z": -1.3193764686584473
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "rug"
+    },
+    {
+      "id": "room_1_wall_21",
+      "position": {
+        "x": 1.134403944015503,
+        "y": 0.8686990141868591,
+        "z": -0.04444777965545654
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_1_lamp_22",
+      "position": {
+        "x": -0.10438382625579834,
+        "y": 3.520369052886963,
+        "z": 1.3245759010314941
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_1_blinds_23",
+      "position": {
+        "x": -2.5736260414123535,
+        "y": -1.087057113647461,
+        "z": 0.3816041052341461
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_1_window_26",
+      "position": {
+        "x": 1.1964175701141357,
+        "y": 1.6477556228637695,
+        "z": 0.3926244080066681
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_1_wall_25",
+      "position": {
+        "x": 1.1706234216690063,
+        "y": 2.7359633445739746,
+        "z": -0.03230029344558716
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_1_nightstand_28",
+      "position": {
+        "x": -0.44174396991729736,
+        "y": 3.1933939456939697,
+        "z": -1.0255509614944458
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "nightstand"
+    },
+    {
+      "id": "room_1_window_29",
+      "position": {
+        "x": -2.6057286262512207,
+        "y": -0.9970002174377441,
+        "z": 0.40109020471572876
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_1_vent_30",
+      "position": {
+        "x": -0.052613675594329834,
+        "y": 1.8683394193649292,
+        "z": 1.3086031675338745
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vent"
+    },
+    {
+      "id": "room_1_switch_31",
+      "position": {
+        "x": -4.82292366027832,
+        "y": 1.4813261032104492,
+        "z": -0.22048255801200867
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "switch"
+    },
+    {
+      "id": "room_1_window_37",
+      "position": {
+        "x": -0.26028668880462646,
+        "y": 4.176037788391113,
+        "z": -0.23096182942390442
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_1_cabinet_36",
+      "position": {
+        "x": -4.607828140258789,
+        "y": 0.5301822423934937,
+        "z": -0.9703341722488403
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "cabinet"
+    },
+    {
+      "id": "room_1_vent_33",
+      "position": {
+        "x": -3.9524388313293457,
+        "y": 1.4977116584777832,
+        "z": 1.3302861452102661
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vent"
+    },
+    {
+      "id": "room_1_bed_32",
+      "position": {
+        "x": 0.39268720149993896,
+        "y": 1.5665884017944336,
+        "z": -0.7091442346572876
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "bed"
+    },
+    {
+      "id": "room_2_vent_61",
+      "position": {
+        "x": -2.0826845169067383,
+        "y": -3.2714362144470215,
+        "z": 0.6513234972953796
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vent"
+    },
+    {
+      "id": "room_2_window_60",
+      "position": {
+        "x": 1.7461302280426025,
+        "y": -4.648282527923584,
+        "z": -0.7018095254898071
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_2_vent_59",
+      "position": {
+        "x": 1.745007038116455,
+        "y": -0.3204081654548645,
+        "z": 0.6523065567016602
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vent"
+    },
+    {
+      "id": "room_2_anonymize_picture_58",
+      "position": {
+        "x": 5.416884422302246,
+        "y": -1.7559118270874023,
+        "z": -0.5866708159446716
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "anonymize_picture"
+    },
+    {
+      "id": "room_2_blinds_57",
+      "position": {
+        "x": 1.672203779220581,
+        "y": -4.030896186828613,
+        "z": -1.6003432273864746
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_2_indoor-plant_56",
+      "position": {
+        "x": 1.973917007446289,
+        "y": -2.977470874786377,
+        "z": -0.9908127784729004
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "indoor-plant"
+    },
+    {
+      "id": "room_2_lamp_55",
+      "position": {
+        "x": -1.1553481817245483,
+        "y": -3.8944478034973145,
+        "z": 0.6568241119384766
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_2_door_54",
+      "position": {
+        "x": -2.1390907764434814,
+        "y": -0.5485342144966125,
+        "z": -0.9590685367584229
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "door"
+    },
+    {
+      "id": "room_2_switch_53",
+      "position": {
+        "x": -0.47724449634552,
+        "y": -1.0432522296905518,
+        "z": -0.9109392762184143
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "switch"
+    },
+    {
+      "id": "room_2_blinds_52",
+      "position": {
+        "x": 1.6907987594604492,
+        "y": -1.7150635719299316,
+        "z": -0.25930917263031006
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_2_bowl_51",
+      "position": {
+        "x": -0.09269552677869797,
+        "y": -0.447203665971756,
+        "z": -1.452939510345459
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "bowl"
+    },
+    {
+      "id": "room_2_window_50",
+      "position": {
+        "x": 1.6556072235107422,
+        "y": -0.9893428087234497,
+        "z": -0.2551676034927368
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_2_sculpture_49",
+      "position": {
+        "x": 0.15295031666755676,
+        "y": -0.04849021136760712,
+        "z": -1.0287286043167114
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "sculpture"
+    },
+    {
+      "id": "room_2_chair_48",
+      "position": {
+        "x": -0.32470524311065674,
+        "y": -4.441966533660889,
+        "z": -1.534264087677002
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_2_indoor-plant_47",
+      "position": {
+        "x": 0.21210522949695587,
+        "y": -0.045437365770339966,
+        "z": -0.3831155598163605
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "indoor-plant"
+    },
+    {
+      "id": "room_2_vase_46",
+      "position": {
+        "x": 0.09281200915575027,
+        "y": -0.05308573693037033,
+        "z": -0.6524171233177185
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vase"
+    },
+    {
+      "id": "room_2_wall-plug_45",
+      "position": {
+        "x": 1.4747594594955444,
+        "y": -1.671917200088501,
+        "z": -1.6080079078674316
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_2_lamp_44",
+      "position": {
+        "x": -1.1594572067260742,
+        "y": -1.4718515872955322,
+        "z": 0.6652568578720093
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_2_wall_43",
+      "position": {
+        "x": -2.139462471008301,
+        "y": -2.813634157180786,
+        "z": -0.6961605548858643
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_2_vent_42",
+      "position": {
+        "x": -0.15685486793518066,
+        "y": -4.794994354248047,
+        "z": 0.6555010676383972
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vent"
+    },
+    {
+      "id": "room_2_wall-plug_41",
+      "position": {
+        "x": -0.1640123575925827,
+        "y": -0.2573373317718506,
+        "z": -1.7094664573669434
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_2_vase_40",
+      "position": {
+        "x": -0.007031939923763275,
+        "y": -0.18344371020793915,
+        "z": -1.4609475135803223
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vase"
+    },
+    {
+      "id": "room_2_lamp_39",
+      "position": {
+        "x": 0.687079668045044,
+        "y": -3.893803119659424,
+        "z": 0.6679148077964783
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_2_blinds_38",
+      "position": {
+        "x": 1.6718099117279053,
+        "y": -4.033421516418457,
+        "z": -0.25070255994796753
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_2_ceiling_37",
+      "position": {
+        "x": -0.2710261344909668,
+        "y": -2.7966389656066895,
+        "z": 0.6583512425422668
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "ceiling"
+    },
+    {
+      "id": "room_2_wall_16",
+      "position": {
+        "x": 1.5690582990646362,
+        "y": -1.7786571979522705,
+        "z": -0.6934841871261597
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_2_chair_12",
+      "position": {
+        "x": 2.239018440246582,
+        "y": -1.7846802473068237,
+        "z": -1.5377202033996582
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_2_chair_11",
+      "position": {
+        "x": 2.613762378692627,
+        "y": -0.5412560701370239,
+        "z": -1.5362880229949951
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_2_vent_15",
+      "position": {
+        "x": -1.8490045070648193,
+        "y": -2.1689858436584473,
+        "z": 0.6608162522315979
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vent"
+    },
+    {
+      "id": "room_2_window_10",
+      "position": {
+        "x": -2.1083836555480957,
+        "y": -1.4012172222137451,
+        "z": -0.8912087678909302
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "window"
+    },
+    {
+      "id": "room_2_vase_14",
+      "position": {
+        "x": 2.2759170532226562,
+        "y": -2.756887435913086,
+        "z": -1.1534013748168945
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vase"
+    },
+    {
+      "id": "room_2_chair_9",
+      "position": {
+        "x": -0.19940978288650513,
+        "y": -2.075000047683716,
+        "z": -1.5362881422042847
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_2_box_22",
+      "position": {
+        "x": 0.10966605693101883,
+        "y": 0.026098493486642838,
+        "z": -1.55795156955719
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "box"
+    },
+    {
+      "id": "room_2_wall-plug_23",
+      "position": {
+        "x": 2.3077476024627686,
+        "y": -5.219704627990723,
+        "z": -1.6216306686401367
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_2_floor_8",
+      "position": {
+        "x": -0.33376967906951904,
+        "y": -2.7938666343688965,
+        "z": -2.0518274307250977
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "floor"
+    },
+    {
+      "id": "room_2_chair_13",
+      "position": {
+        "x": 3.056556224822998,
+        "y": -1.501939296722412,
+        "z": -1.537885308265686
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_2_chair_7",
+      "position": {
+        "x": 3.6672868728637695,
+        "y": -0.936964750289917,
+        "z": -1.5338892936706543
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_2_chair_3",
+      "position": {
+        "x": 3.5502071380615234,
+        "y": -1.6900625228881836,
+        "z": -1.5313016176223755
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_2_rug_1",
+      "position": {
+        "x": -0.47587525844573975,
+        "y": -3.2375526428222656,
+        "z": -2.0298376083374023
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "rug"
+    },
+    {
+      "id": "room_2_undefined_33",
+      "position": {
+        "x": -0.42064714431762695,
+        "y": -1.2551473379135132,
+        "z": -1.100759506225586
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_2_undefined_34",
+      "position": {
+        "x": -0.31930363178253174,
+        "y": -2.665618896484375,
+        "z": 0.6273775100708008
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "undefined"
+    },
+    {
+      "id": "room_2_chair_6",
+      "position": {
+        "x": 3.178774118423462,
+        "y": -0.4912232458591461,
+        "z": -1.5317964553833008
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "chair"
+    },
+    {
+      "id": "room_2_box_2",
+      "position": {
+        "x": 0.08513244986534119,
+        "y": 0.0005985833704471588,
+        "z": -1.5354653596878052
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "box"
+    },
+    {
+      "id": "room_2_shelf_4",
+      "position": {
+        "x": -0.11332832276821136,
+        "y": -0.046120189130306244,
+        "z": -1.4313825368881226
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "shelf"
+    },
+    {
+      "id": "room_2_table_5",
+      "position": {
+        "x": 2.9448983669281006,
+        "y": -1.399115800857544,
+        "z": -1.6453907489776611
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "table"
+    },
+    {
+      "id": "room_2_wall_30",
+      "position": {
+        "x": -0.2315261960029602,
+        "y": 0.08274561166763306,
+        "z": -0.6937779188156128
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_2_plate_31",
+      "position": {
+        "x": -0.05309699848294258,
+        "y": -0.08851566910743713,
+        "z": -1.9536924362182617
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "plate"
+    },
+    {
+      "id": "room_2_blinds_32",
+      "position": {
+        "x": 1.6682333946228027,
+        "y": -0.6078107953071594,
+        "z": -0.25685080885887146
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_2_vase_17",
+      "position": {
+        "x": -0.06809332966804504,
+        "y": -0.4409864544868469,
+        "z": -0.5572406053543091
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vase"
+    },
+    {
+      "id": "room_2_wall_20",
+      "position": {
+        "x": 5.348613739013672,
+        "y": -1.9975237846374512,
+        "z": -0.6954753994941711
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall"
+    },
+    {
+      "id": "room_2_blinds_19",
+      "position": {
+        "x": 1.723231315612793,
+        "y": -5.062430381774902,
+        "z": -1.5973800420761108
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_2_plate_18",
+      "position": {
+        "x": 0.9241487979888916,
+        "y": -3.092629909515381,
+        "z": -1.2167068719863892
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "plate"
+    },
+    {
+      "id": "room_2_sculpture_21",
+      "position": {
+        "x": -0.05397554486989975,
+        "y": -0.3724559247493744,
+        "z": -1.1482446193695068
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "sculpture"
+    },
+    {
+      "id": "room_2_box_24",
+      "position": {
+        "x": 0.029062466695904732,
+        "y": -0.0032648220658302307,
+        "z": -1.4872689247131348
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "box"
+    },
+    {
+      "id": "room_2_wall-plug_25",
+      "position": {
+        "x": 5.525506019592285,
+        "y": -1.4168014526367188,
+        "z": -1.6173954010009766
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "wall-plug"
+    },
+    {
+      "id": "room_2_vase_27",
+      "position": {
+        "x": 0.13242995738983154,
+        "y": -0.1600733995437622,
+        "z": -0.5600010752677917
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "vase"
+    },
+    {
+      "id": "room_2_bottle_26",
+      "position": {
+        "x": 0.22099420428276062,
+        "y": -0.050575241446495056,
+        "z": -1.5310053825378418
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "bottle"
+    },
+    {
+      "id": "room_2_lamp_36",
+      "position": {
+        "x": 1.5728933811187744,
+        "y": 0.33565741777420044,
+        "z": 0.6683557629585266
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "lamp"
+    },
+    {
+      "id": "room_2_box_28",
+      "position": {
+        "x": -0.09208954870700836,
+        "y": -0.4262503981590271,
+        "z": -1.5398900508880615
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "box"
+    },
+    {
+      "id": "room_2_blinds_29",
+      "position": {
+        "x": 1.676748275756836,
+        "y": -5.062431335449219,
+        "z": -0.2597309350967407
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "blinds"
+    },
+    {
+      "id": "room_2_box_35",
+      "position": {
+        "x": -0.046021439135074615,
+        "y": -0.30646324157714844,
+        "z": -1.1617639064788818
+      },
+      "confidence": 1.0,
+      "observe_count": 1,
+      "class": "box"
+    }
+  ]
+}

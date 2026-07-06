@@ -1,0 +1,7 @@
+nav_service_node:
+  ros__parameters:
+    nav_action: "navigate_to_pose"          # Nav2 action server 名稱
+    costmap_topic: "/global_costmap/costmap"
+    map_frame: "map"
+    base_frame: "base_link"
+    nav_timeout: 120.0                      # 單次導航最長等待時間（秒）

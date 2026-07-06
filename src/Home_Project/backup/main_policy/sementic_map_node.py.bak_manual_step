@@ -1,0 +1,499 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import math
+import threading
+import time
+from pathlib import Path
+from typing import Any, Optional, Tuple
+
+import yaml
+import rclpy
+from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.executors import MultiThreadedExecutor
+from rclpy.node import Node
+from std_srvs.srv import Trigger
+
+from semantic_nav_interfaces.srv import NavToPoint
+
+
+class WaypointNavToPointStepService(Node):
+    def __init__(
+        self,
+        yaml_file: str,
+        auto_start: bool = False,
+        start_delay: float = 3.0,
+        retry_on_fail: bool = False,
+        skip_on_fail: bool = False,
+        stop_after_fail: bool = True,
+        max_fail_retries: int = 3,
+        busy_wait: float = 3.0,
+        fail_retry_wait: float = 3.0,
+        success_delay: float = 2.0,
+        skip_delay: float = 2.0,
+        service_wait_timeout: float = 5.0,
+        service_result_timeout: float = 180.0,
+        use_yaw: bool = True,
+    ):
+        super().__init__("waypoint_nav_to_point_step_service")
+
+        self.yaml_file = yaml_file
+        self.frame_id, self.waypoints = self.load_waypoints(yaml_file)
+        self.current_index = 0
+
+        self.auto_start = auto_start
+        self.start_delay = start_delay
+        self.retry_on_fail = retry_on_fail
+        self.skip_on_fail = skip_on_fail
+        self.stop_after_fail = stop_after_fail
+
+        self.max_fail_retries = max(0, int(max_fail_retries))
+        self.busy_wait = max(0.1, float(busy_wait))
+        self.fail_retry_wait = max(0.1, float(fail_retry_wait))
+        self.success_delay = max(0.0, float(success_delay))
+        self.skip_delay = max(0.0, float(skip_delay))
+        self.service_wait_timeout = max(0.1, float(service_wait_timeout))
+        self.service_result_timeout = max(1.0, float(service_result_timeout))
+        self.use_yaw = bool(use_yaw)
+
+        self.running = False
+        self.stop_requested = False
+        self.lock = threading.Lock()
+
+        self.fail_count = 0
+        self.busy_count = 0
+
+        self.auto_thread: Optional[threading.Thread] = None
+        self.auto_timer: Optional[threading.Timer] = None
+
+        self.cbg = ReentrantCallbackGroup()
+
+        self.nav_client = self.create_client(
+            NavToPoint,
+            "/nav_to_point",
+            callback_group=self.cbg,
+        )
+
+        self.next_srv = self.create_service(
+            Trigger,
+            "/next_waypoint_nav",
+            self.handle_next_waypoint,
+            callback_group=self.cbg,
+        )
+
+        self.reset_srv = self.create_service(
+            Trigger,
+            "/reset_waypoint_nav",
+            self.handle_reset_waypoint,
+            callback_group=self.cbg,
+        )
+
+        self.start_srv = self.create_service(
+            Trigger,
+            "/start_waypoint_nav_auto",
+            self.handle_start_auto,
+            callback_group=self.cbg,
+        )
+
+        self.stop_srv = self.create_service(
+            Trigger,
+            "/stop_waypoint_nav_auto",
+            self.handle_stop_auto,
+            callback_group=self.cbg,
+        )
+
+        self.get_logger().info("Waypoint NavToPoint service ready.")
+        self.get_logger().info(f"YAML: {self.yaml_file}")
+        self.get_logger().info(f"frame_id: {self.frame_id}")
+        self.get_logger().info(f"waypoints: {len(self.waypoints)}")
+        self.get_logger().info("Manual service: /next_waypoint_nav")
+        self.get_logger().info("Reset service : /reset_waypoint_nav")
+        self.get_logger().info("Auto start    : /start_waypoint_nav_auto")
+        self.get_logger().info("Auto stop     : /stop_waypoint_nav_auto")
+        self.get_logger().info(f"use_yaw       : {self.use_yaw}")
+        self.get_logger().info(f"max retries   : {self.max_fail_retries}")
+        self.get_logger().info(f"busy wait     : {self.busy_wait:.1f} sec")
+        self.get_logger().info(f"retry wait    : {self.fail_retry_wait:.1f} sec")
+
+        if self.auto_start:
+            self.get_logger().info(
+                f"Auto mode enabled. Will start after {self.start_delay:.1f} sec."
+            )
+            self.auto_timer = threading.Timer(self.start_delay, self.start_auto_thread)
+            self.auto_timer.daemon = True
+            self.auto_timer.start()
+
+    def load_waypoints(self, yaml_file: str):
+        path = Path(yaml_file)
+        if not path.exists():
+            raise FileNotFoundError(f"YAML file not found: {yaml_file}")
+
+        with open(path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+
+        if data is None:
+            raise RuntimeError(f"YAML is empty: {yaml_file}")
+
+        frame_id = data.get("frame_id", "map")
+        waypoints = data.get("waypoints", [])
+
+        if not waypoints:
+            raise RuntimeError("No waypoints found in YAML.")
+
+        return frame_id, waypoints
+
+    def sleep_interruptible(self, seconds: float):
+        end_time = time.time() + seconds
+        while rclpy.ok() and not self.stop_requested and time.time() < end_time:
+            time.sleep(min(0.1, max(0.0, end_time - time.time())))
+
+    def is_busy_message(self, msg: str) -> bool:
+        text = (msg or "").lower()
+        return "busy" in text or "try again later" in text
+
+    def wait_for_future_done(self, future, timeout_sec: float) -> bool:
+        start = time.time()
+        while rclpy.ok() and not self.stop_requested:
+            if future.done():
+                return True
+
+            if time.time() - start > timeout_sec:
+                return False
+
+            time.sleep(0.05)
+
+        return False
+
+    def call_nav_to_point(self, wp) -> Tuple[bool, str, Any]:
+        if not self.nav_client.wait_for_service(timeout_sec=self.service_wait_timeout):
+            return False, "/nav_to_point service not available.", None
+
+        nav_req = NavToPoint.Request()
+        nav_req.x = float(wp["x"])
+        nav_req.y = float(wp["y"])
+
+        nav_req.use_yaw = self.use_yaw
+        nav_req.yaw = float(wp.get("yaw", 0.0))
+
+        future = self.nav_client.call_async(nav_req)
+
+        done = self.wait_for_future_done(
+            future,
+            timeout_sec=self.service_result_timeout,
+        )
+
+        if not done:
+            return False, "NavToPoint service call timeout.", None
+
+        if future.result() is None:
+            exc = future.exception()
+            if exc is not None:
+                return False, f"NavToPoint future exception: {exc}", None
+            return False, "NavToPoint future result is None.", None
+
+        nav_res = future.result()
+        return bool(nav_res.success), str(nav_res.message), nav_res
+
+    def get_wp_id(self, index: int, wp) -> str:
+        return str(wp.get("id", f"wp_{index:03d}"))
+
+    def run_one_waypoint(self):
+        if self.current_index >= len(self.waypoints):
+            return False, "All waypoints finished."
+
+        wp = self.waypoints[self.current_index]
+
+        wp_id = self.get_wp_id(self.current_index, wp)
+        source_node_id = wp.get("source_node_id", "unknown")
+
+        x = float(wp["x"])
+        y = float(wp["y"])
+        yaw = float(wp.get("yaw", 0.0))
+
+        self.get_logger().info(
+            f"[WAYPOINT] {self.current_index + 1}/{len(self.waypoints)} "
+            f"{wp_id}, source_node_id={source_node_id}, "
+            f"x={x:.3f}, y={y:.3f}, yaw={yaw:.3f}"
+        )
+
+        if not math.isfinite(x) or not math.isfinite(y) or not math.isfinite(yaw):
+            msg = f"Waypoint invalid: {wp_id}, x/y/yaw is not finite."
+            self.get_logger().warn(msg)
+            return False, msg
+
+        success, message, nav_res = self.call_nav_to_point(wp)
+
+        if success:
+            self.current_index += 1
+            self.fail_count = 0
+            self.busy_count = 0
+
+            if nav_res is not None:
+                msg = (
+                    f"Waypoint done: {wp_id}, "
+                    f"final=({nav_res.final_x:.3f}, {nav_res.final_y:.3f}), "
+                    f"yaw={nav_res.final_yaw:.3f}, message={message}"
+                )
+            else:
+                msg = f"Waypoint done: {wp_id}, message={message}"
+
+            self.get_logger().info(msg)
+            return True, msg
+
+        msg = f"Waypoint failed: {wp_id}, message={message}"
+        self.get_logger().warn(msg)
+        return False, msg
+
+    def handle_failed_waypoint(self, msg: str) -> bool:
+        """
+        Return True means continue auto loop.
+        Return False means stop auto loop.
+        """
+
+        # busy 不要馬上 skip，但也不能永遠卡住。
+        if self.is_busy_message(msg):
+            self.busy_count += 1
+
+            if self.busy_count <= 3:
+                self.get_logger().warn(
+                    f"Navigator busy. Wait {self.busy_wait:.1f} sec and retry same waypoint. "
+                    f"busy_count={self.busy_count}/3"
+                )
+                self.sleep_interruptible(self.busy_wait)
+                return True
+
+            self.get_logger().warn(
+                "Navigator busy too many times. Treat this waypoint as failed."
+            )
+
+            # busy 超過 3 次後，如果允許 skip，就跳下一點
+            if self.skip_on_fail:
+                wp = self.waypoints[self.current_index]
+                wp_id = self.get_wp_id(self.current_index, wp)
+
+                self.get_logger().warn(
+                    f"Skip mode enabled. Skip busy waypoint: {wp_id}"
+                )
+
+                self.current_index += 1
+                self.fail_count = 0
+                self.busy_count = 0
+                self.sleep_interruptible(self.skip_delay)
+                return True
+
+            if self.stop_after_fail:
+                self.get_logger().error("Stop after busy enabled. Auto navigation stopped.")
+                return False
+
+            return False
+
+        # 不是 busy，才算一般導航失敗
+        self.busy_count = 0
+        self.fail_count += 1
+
+        should_retry_before_skip = self.retry_on_fail or self.skip_on_fail
+
+        if should_retry_before_skip and self.fail_count <= self.max_fail_retries:
+            self.get_logger().warn(
+                f"Waypoint failed. Retry same waypoint "
+                f"{self.fail_count}/{self.max_fail_retries} "
+                f"after {self.fail_retry_wait:.1f} sec."
+            )
+            self.sleep_interruptible(self.fail_retry_wait)
+            return True
+
+        if self.skip_on_fail:
+            wp = self.waypoints[self.current_index]
+            wp_id = self.get_wp_id(self.current_index, wp)
+
+            self.get_logger().warn(
+                f"Skip mode enabled. Failed {self.fail_count} times, "
+                f"skip waypoint: {wp_id}"
+            )
+
+            self.current_index += 1
+            self.fail_count = 0
+            self.busy_count = 0
+            self.sleep_interruptible(self.skip_delay)
+            return True
+
+        if self.stop_after_fail:
+            self.get_logger().error("Stop after fail enabled. Auto navigation stopped.")
+            return False
+
+        return False
+
+    def auto_loop(self):
+        with self.lock:
+            if self.running:
+                self.get_logger().warn("Auto waypoint navigation already running.")
+                return
+
+            self.running = True
+            self.stop_requested = False
+            self.fail_count = 0
+            self.busy_count = 0
+
+        self.get_logger().info("Auto waypoint navigation started.")
+
+        try:
+            while rclpy.ok():
+                if self.stop_requested:
+                    self.get_logger().warn("Auto waypoint navigation stopped by request.")
+                    break
+
+                if self.current_index >= len(self.waypoints):
+                    self.get_logger().info("All waypoints finished.")
+                    break
+
+                ok, msg = self.run_one_waypoint()
+
+                if ok:
+                    self.sleep_interruptible(self.success_delay)
+                    continue
+
+                keep_running = self.handle_failed_waypoint(msg)
+                if not keep_running:
+                    break
+
+        finally:
+            with self.lock:
+                self.running = False
+            self.get_logger().info("Auto waypoint navigation ended.")
+
+    def start_auto_thread(self):
+        with self.lock:
+            if self.running:
+                self.get_logger().warn("Auto waypoint navigation already running.")
+                return
+
+        self.auto_thread = threading.Thread(target=self.auto_loop, daemon=True)
+        self.auto_thread.start()
+
+    def handle_start_auto(self, request, response):
+        with self.lock:
+            if self.running:
+                response.success = False
+                response.message = "Auto waypoint navigation already running."
+                return response
+
+        self.start_auto_thread()
+        response.success = True
+        response.message = "Auto waypoint navigation started."
+        return response
+
+    def handle_stop_auto(self, request, response):
+        self.stop_requested = True
+        response.success = True
+        response.message = "Stop requested."
+        return response
+
+    def handle_next_waypoint(self, request, response):
+        with self.lock:
+            if self.running:
+                response.success = False
+                response.message = "Auto mode is running. Stop it before manual next."
+                return response
+
+        ok, msg = self.run_one_waypoint()
+        response.success = ok
+        response.message = msg
+        return response
+
+    def handle_reset_waypoint(self, request, response):
+        with self.lock:
+            if self.running:
+                response.success = False
+                response.message = "Auto mode is running. Stop it before reset."
+                return response
+
+            self.current_index = 0
+            self.fail_count = 0
+            self.busy_count = 0
+
+        response.success = True
+        response.message = "Waypoint index reset to 0."
+        self.get_logger().info("Waypoint index reset to 0.")
+        return response
+
+    def destroy_node(self):
+        self.stop_requested = True
+
+        if self.auto_timer is not None:
+            try:
+                self.auto_timer.cancel()
+            except Exception:
+                pass
+
+        return super().destroy_node()
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--yaml", required=True)
+    parser.add_argument("--auto-start", action="store_true")
+    parser.add_argument("--start-delay", type=float, default=3.0)
+
+    parser.add_argument("--retry-on-fail", action="store_true")
+    parser.add_argument("--skip-on-fail", action="store_true")
+
+    parser.add_argument("--max-fail-retries", type=int, default=3)
+    parser.add_argument("--busy-wait", type=float, default=3.0)
+    parser.add_argument("--fail-retry-wait", type=float, default=3.0)
+    parser.add_argument("--success-delay", type=float, default=2.0)
+    parser.add_argument("--skip-delay", type=float, default=2.0)
+
+    parser.add_argument("--service-wait-timeout", type=float, default=5.0)
+    parser.add_argument("--service-result-timeout", type=float, default=180.0)
+
+    parser.add_argument("--use-yaw", dest="use_yaw", action="store_true", default=True)
+    parser.add_argument("--no-use-yaw", dest="use_yaw", action="store_false")
+
+    args = parser.parse_args()
+
+    rclpy.init()
+
+    stop_after_fail = not args.retry_on_fail and not args.skip_on_fail
+
+    node = WaypointNavToPointStepService(
+        yaml_file=args.yaml,
+        auto_start=args.auto_start,
+        start_delay=args.start_delay,
+        retry_on_fail=args.retry_on_fail,
+        skip_on_fail=args.skip_on_fail,
+        stop_after_fail=stop_after_fail,
+        max_fail_retries=args.max_fail_retries,
+        busy_wait=args.busy_wait,
+        fail_retry_wait=args.fail_retry_wait,
+        success_delay=args.success_delay,
+        skip_delay=args.skip_delay,
+        service_wait_timeout=args.service_wait_timeout,
+        service_result_timeout=args.service_result_timeout,
+        use_yaw=args.use_yaw,
+    )
+
+    executor = MultiThreadedExecutor(num_threads=4)
+    executor.add_node(node)
+
+    try:
+        executor.spin()
+    except KeyboardInterrupt:
+        node.stop_requested = True
+    finally:
+        try:
+            executor.shutdown()
+        except Exception:
+            pass
+
+        try:
+            node.destroy_node()
+        except Exception:
+            pass
+
+        if rclpy.ok():
+            rclpy.shutdown()
+
+
+if __name__ == "__main__":
+    main()

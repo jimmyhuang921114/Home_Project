@@ -1,0 +1,4 @@
+psycopg[binary]==3.2.9
+python-dotenv==1.0.1
+PyYAML>=6,<7
+textual>=0.89.1,<2.0

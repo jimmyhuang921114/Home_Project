@@ -1,0 +1,131 @@
+ram_node:
+  ros__parameters:
+    image_topic: /realsense/rgb
+    tags_topic: /ram/tags
+    debug_topic: /ram/debug_image
+    trigger_service: /ram/run_once
+
+    # IMPORTANT: waypoint mode. RAM only caches the latest image and runs when /ram/run_once is called.
+    continuous_inference: false
+    latest_image_timeout_s: 5.0
+
+    ram_repo_path: /workspace/visual/src/recognize-anything
+    model_type: ram_plus
+    pretrained_path: /workspace/visual/src/recognize-anything/pretrained/ram_plus_swin_large_14m.pth
+    vit: swin_l
+    image_size: 384
+
+    # Service trigger still has a small rate limit to prevent accidental double calls.
+    min_period_s: 0.5
+    max_tags: 60
+    tag_threshold: 0.58
+    publish_json: false
+    publish_empty: false
+
+    fallback_when_empty: false
+    fallback_tags: "sofa,couch,chair,table,coffee table,television,tv,window,lamp,door,cabinet,bottle,person"
+
+grounding_dino_node:
+  ros__parameters:
+    image_topic: /realsense/rgb
+    ram_tags_topic: /ram/tags
+    bboxes_topic: /grounding_dino/bboxes_raw
+    debug_image_topic: /grounding_dino/debug_image
+    done_topic: /grounding_dino/detect_done
+    trigger_service: /grounding_dino/detect_once
+    done_service_name: ""
+
+    # Trigger RAM at each waypoint detection. This prevents RAM continuous inference.
+    trigger_ram_before_detection: true
+    ram_trigger_service: /ram/run_once
+    ram_wait_timeout_s: 4.0
+
+    hf_model_name: IDEA-Research/grounding-dino-tiny
+    device: cuda
+
+    # RAM fresh and tags >= min_ram_tags -> use RAM prompt.
+    # RAM stale or too few tags -> use default_prompt.
+    use_ram_tags: true
+    max_ram_tags: 50
+    min_ram_tags: 2
+    ram_tags_timeout_s: 6.0
+    use_ram_tag_memory: false
+    ram_tag_memory_s: 6.0
+    always_include_default_prompt: false
+    max_prompt_tags: 50
+    ignore_tags: "indoor,outdoor,wall,floor,ceiling,room,scene,image,photo,picture,background,light,lighting,wood,metal,plastic,black,white,red,blue,green,yellow,gray,grey,color,modern,decoration,ornament"
+    default_prompt: "sofa . couch . chair . table . desk . cabinet . door . curtain . blind . sink . bottle . cup . mug . bowl . box . book . monitor . tv . laptop . keyboard . trash can . refrigerator . microwave . oven . drawer . shelf . plant ."
+
+    # Balanced accuracy. Higher than high-recall mode, fewer false positives.
+    threshold: 0.20
+    box_threshold: 0.20
+    text_threshold: 0.18
+
+    multi_frame_count: 3
+    min_frame_votes: 2
+    frame_collect_timeout_s: 4.0
+    allow_partial_frames: true
+    use_latest_image_on_trigger: true
+    min_period_s: 0.12
+
+    # Full image first. 2x2 tiles only run when full image has too few detections.
+    use_tiled_inference: true
+    include_full_image: true
+    auto_tile_if_few_detections: true
+    auto_tile_min_full_detections: 8
+    tile_rows: 2
+    tile_cols: 2
+    tile_overlap_ratio: 0.08
+    min_tile_size: 64
+
+    nms_iou_threshold: 0.55
+    nms_containment_threshold: 0.94
+    merge_iou_threshold: 0.55
+    merge_containment_threshold: 0.94
+    same_class_only: true
+    min_final_score: 0.20
+    max_detections_per_region: 100
+    max_final_detections: 150
+
+    publish_empty: true
+    publish_debug_image: true
+    draw_tile_grid: false
+
+bbox_filter_fusion_node:
+  ros__parameters:
+    input_topic: /grounding_dino/bboxes_raw
+    output_topic: /grounding_dino/bboxes
+    debug_topic: /grounding_dino/filter_debug
+
+    # Final filter for semantic-map candidate quality.
+    min_score: 0.22
+    min_area_ratio: 0.0002
+    max_area_ratio: 0.55
+    min_width_px: 10.0
+    min_height_px: 10.0
+    max_aspect_ratio: 10.0
+
+    # Empty allowed_classes means no whitelist. For higher precision, set this per room.
+    allowed_classes: ""
+    blocked_classes: "background,ceiling,floor,image,photo,room,wall,kitchen,dining room,modern,object,decoration,ornament"
+
+    class_aware_nms_iou: 0.50
+    class_aware_containment: 0.90
+    class_agnostic_nms_iou: 0.85
+    class_agnostic_containment: 0.96
+
+    enable_tile_seam_filter: false
+    tile_rows: 2
+    tile_cols: 2
+    seam_margin_ratio: 0.025
+    drop_large_tile_edge_boxes: false
+
+    # Per-detect_once already uses multi-frame votes. Keep temporal disabled here.
+    enable_temporal_filter: false
+    confirm_hits: 1
+    temporal_iou: 0.35
+    track_ttl_s: 3.0
+    publish_unconfirmed: true
+
+    max_output_detections: 80
+    publish_empty: true

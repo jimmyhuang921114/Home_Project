@@ -1,0 +1,9 @@
+string json_payload
+string mode
+---
+bool success
+string frame_id
+int64 source_next_id
+int64 object_count
+string error_type
+string message

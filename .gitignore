@@ -1,0 +1,111 @@
+# =========================
+# ROS2 / colcon generated
+# =========================
+/build/
+/install/
+/log/
+
+# nested ROS2 workspace generated folders
+**/build/
+**/install/
+**/log/
+
+# =========================
+# Python generated
+# =========================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Python env / local config
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# =========================
+# Node / Vite frontend
+# =========================
+node_modules/
+dist/
+.next/
+.vite/
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Runtime / temporary files
+# =========================
+*.log
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# =========================
+# Large AI model / dataset files
+# 建議不要直接放 git，改用下載腳本或 Git LFS
+# =========================
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.engine
+*.trt
+*.safetensors
+*.weights
+*.bin
+
+# common heavy folders
+checkpoints/
+pretrained/
+datasets/
+runs/
+outputs/
+wandb/
+
+# =========================
+# Media / bags / videos
+# =========================
+*.bag
+*.db3
+*.mcap
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.png
+*.jpg
+*.jpeg
+
+# 如果 map 圖片要跟專案一起保存，不要忽略 map 資料夾。
+# 但大型測試影像、影片、rosbag 不要放 git。
+
+# =========================
+# IDE
+# =========================
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+
+# =========================
+# Optional manual backups
+# 如果 backup 只是舊備份，不想上傳 git，就取消下面註解
+# =========================
+# backup/
+# src/Home_Project/backup/

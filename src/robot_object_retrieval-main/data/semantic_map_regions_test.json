@@ -1,0 +1,43 @@
+{
+  "frame_id": "map",
+  "next_id": 19,
+  "objects": [],
+  "regions": [
+    {
+      "id": "seating_area",
+      "name": "座位區",
+      "aliases": ["椅子區", "沙發區", "seating"],
+      "geometry": {
+        "type": "aabb",
+        "min_x": 0.6,
+        "max_x": 1.7,
+        "min_y": 0.0,
+        "max_y": 0.7
+      }
+    },
+    {
+      "id": "storage_area",
+      "name": "收納區",
+      "aliases": ["櫃子旁", "storage"],
+      "geometry": {
+        "type": "aabb",
+        "min_x": -1.6,
+        "max_x": -1.2,
+        "min_y": 0.2,
+        "max_y": 0.6
+      }
+    },
+    {
+      "id": "window_wall",
+      "name": "窗邊牆面",
+      "aliases": ["窗邊", "window side"],
+      "geometry": {
+        "type": "aabb",
+        "min_x": -2.0,
+        "max_x": -1.7,
+        "min_y": -1.0,
+        "max_y": -0.7
+      }
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{"id":"diagnostic_search_book","kind":"diagnostic","turns":["請搜尋一本 book，回答前三個合理候選的 id、class 與座標。"],"enable_robot_tools":false,"expected_behavior":"應呼叫 search_semantic_map_object，並根據候選回答。","review_focus":"搜尋 query、候選 grounding、回答座標。"}
+{"id":"diagnostic_search_missing_object","kind":"diagnostic","turns":["請找一個 quantum toaster。如果語意地圖沒有合理候選，直接說找不到。"],"enable_robot_tools":false,"expected_behavior":"不應因向量搜尋總會回傳候選而硬選不相關物體。","review_focus":"候選相關性、拒絕不合理候選。"}
+{"id":"diagnostic_search_ambiguous_chair","kind":"diagnostic","turns":["幫我找一張椅子。若有多個相近候選，請先說明需要我確認。"],"enable_robot_tools":false,"expected_behavior":"應搜尋 chair，並在多個合理候選時要求確認。","review_focus":"多候選處理。"}
+{"id":"diagnostic_transport_book","kind":"diagnostic","turns":["請找一本 book，選擇合理候選，使用 fake robot tools 把它搬到 x=4 y=7。"],"enable_robot_tools":true,"expected_behavior":"應搜尋、移動到物體、呼叫 VLA 放上平台、移動到目標、呼叫 VLA 放下。","review_focus":"工具順序、座標、VLA 指令、最終敘述。"}
+{"id":"diagnostic_transport_book_vla_state","kind":"diagnostic","turns":["請找一本 book，使用 fake robot tools 把它搬到 x=2 y=3，最後說明平台狀態。"],"enable_robot_tools":true,"expected_behavior":"模型敘述應與 fake VLA 回傳的 object_on_platform 狀態一致。","review_focus":"fake adapter state、模型敘述一致性。"}

@@ -1,0 +1,12 @@
+# 請求：地圖座標 + 可選終點朝向
+float64 x
+float64 y
+bool    use_yaw       # true = 使用自訂朝向；false = 面向目標點（預設行為）
+float64 yaw           # 終點朝向（弧度，use_yaw=true 時生效）
+---
+# 回應
+bool    success
+string  message
+float64 final_x       # 實際抵達位置
+float64 final_y
+float64 final_yaw     # 實際終點朝向（弧度）
