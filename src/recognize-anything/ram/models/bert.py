@@ -1102,3 +1102,20 @@ try:
     BertModel._tied_weights_keys = []
 except NameError:
     pass
+
+# ----------------------------------------------------------------------
+# Local compatibility patch for newer transformers.
+# RAM / recognize-anything has its own custom BERT implementation.
+# Newer transformers PreTrainedModel.tie_weights() expects a different
+# _tied_weights_keys structure and may crash with:
+# AttributeError: 'list' object has no attribute 'items'
+#
+# For RAM inference, tied weight handling is not needed here, so disable it.
+# ----------------------------------------------------------------------
+def _ram_noop_tie_weights(self, *args, **kwargs):
+    return None
+
+try:
+    BertPreTrainedModel.tie_weights = _ram_noop_tie_weights
+except NameError:
+    pass

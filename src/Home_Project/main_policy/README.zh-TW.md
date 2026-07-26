@@ -2,6 +2,46 @@
 
 ROS 2 套件，負責語意地圖的 **地圖整合層**。
 
+## Robot Flow / HTTP API
+
+`robot_flow_bringup.launch.py` 新增單一 motion owner 架構：
+
+```
+HTTP / WebSocket -> robot_api_server -> /robot_flow/execute
+                                      -> robot_task_executor -> Nav2 / optional arm
+feedback -> robot_state -> /robot/state_json -> HTTP / WebSocket
+```
+
+舊 dashboard API 保持在 `/api/*`；新的 robot-action contract 位於
+`/api/v1/*`，預設為 `http://127.0.0.1:8020`，互動文件在 `/docs`。v1 的
+navigation 與 VLA mutation 會保留 request-id、非同步 goal 狀態與最近 feedback；
+非 loopback bind 或啟用真實硬體時必須設定 `api_token`（或
+`MAIN_POLICY_API_TOKEN`）。此 launch 不會
+重複啟動 Nav2、map server、semantic database 或既有的 `:8000` API。
+
+Arm 預設 `arm_enabled=false`。目前專案與 ROS graph 均未提供可確認的 Arm
+或 Gripper action 名稱與 joint names，因此不猜值；Arm request 會回傳
+`ARM_SERVER_UNAVAILABLE`。要啟用 FollowJointTrajectory adapter，必須明確
+設定 `arm_enabled:=true`、`arm_action:=<實際 action>` 及
+`arm_joint_names:='[joint_1,...]'`，並先確認 graph type 為
+`control_msgs/action/FollowJointTrajectory`。
+
+安全啟動 Robot Flow（不自動執行 mapping、不送 goal）：
+
+```bash
+ros2 launch main_policy robot_flow_bringup.launch.py \
+  start_mapping_orchestrator:=false arm_enabled:=false
+```
+
+只供測試的隔離 action 名稱（需要安裝 `control_msgs`）：
+
+```bash
+ros2 launch main_policy robot_flow_mock.launch.py api_port:=18001
+```
+
+此 mock launch 只提供 `/mock_navigate_to_pose` 與
+`/mock_arm_controller/follow_joint_trajectory`，不連接真實控制器。
+
 ## 節點說明
 
 ### `map_builder_node` ← 主要節點

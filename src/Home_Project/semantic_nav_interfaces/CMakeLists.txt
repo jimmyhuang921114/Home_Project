@@ -3,9 +3,14 @@ project(semantic_nav_interfaces)
 
 find_package(ament_cmake REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(builtin_interfaces REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
+  "action/ExecuteRobotTask.action"
+  "msg/RobotFlowStatus.msg"
   "srv/NavToPoint.srv"
+  "srv/SetRobotMode.srv"
+  DEPENDENCIES builtin_interfaces
 )
 
 ament_package()

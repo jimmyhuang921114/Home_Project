@@ -1,0 +1,16 @@
+# Goal
+string task_type
+string json_payload
+---
+# Result
+bool success
+string final_state
+string message
+string json_result
+---
+# Feedback
+string state
+string step
+float32 progress
+string message
+string json_detail

@@ -1,0 +1,51 @@
+robot_mode_manager_node:
+  ros__parameters:
+    default_mode: IDLE
+    cancel_timeout_s: 10.0
+
+robot_task_executor_node:
+  ros__parameters:
+    nav_action: /navigate_to_pose
+    nav_server_timeout_s: 5.0
+    nav_timeout_s: 180.0
+    arm_enabled: false
+    arm_action: ""
+    arm_joint_names: [""]
+    arm_timeout_s: 60.0
+    arm_named_poses_json: "{}"
+
+robot_state_node:
+  ros__parameters:
+    publish_rate_hz: 5.0
+    pose_stale_s: 2.0
+    joint_state_stale_s: 2.0
+    arm_enabled: false
+
+robot_api_server_node:
+  ros__parameters:
+    api_host: 127.0.0.1
+    api_port: 8020
+    api_token: ""
+    hardware_execution_enabled: false
+    vla_server_execute_enabled: false
+    nav_action: /navigate_to_pose
+    vla_action: /pickplace_segment
+    vla_tasks_json: "[]"
+    vla_catalog_version: unconfigured
+    nav_behavior_tree_allowlist: []
+    initial_holding_state: unknown
+    initial_base_motion_permission: unknown
+    cors_origins:
+      - http://localhost:3000
+      - http://localhost:8000
+    action_server_timeout_s: 3.0
+    accept_timeout_s: 5.0
+
+robot_task_orchestrator_node:
+  ros__parameters:
+    prefer_robot_flow: true
+    robot_flow_action: /robot_flow/execute
+    robot_flow_server_timeout_s: 5.0
+    nav_service: /nav_to_point
+    nav_timeout_s: 180.0
+    auto_start: false

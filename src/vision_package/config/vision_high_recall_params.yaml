@@ -40,7 +40,7 @@ grounding_dino_node:
     ram_trigger_service: /ram/run_once
     ram_wait_timeout_s: 4.0
 
-    hf_model_name: IDEA-Research/grounding-dino-tiny
+    hf_model_name: "models/hf/grounding-dino-tiny"
     device: cuda
 
     # RAM fresh and tags >= min_ram_tags -> use RAM prompt.

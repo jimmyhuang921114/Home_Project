@@ -1,0 +1,10 @@
+builtin_interfaces/Time stamp
+string task_id
+string mode
+string task_type
+string state
+string step
+float32 progress
+bool busy
+string message
+string json_detail

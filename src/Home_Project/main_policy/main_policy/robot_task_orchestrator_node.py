@@ -6,7 +6,9 @@ import math
 import os
 import threading
 import time
+import uuid
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any, Optional, Tuple
 
 import yaml
@@ -14,11 +16,14 @@ import rclpy
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
+from rclpy.action import ActionClient
 
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 
-from semantic_nav_interfaces.srv import NavToPoint
+from semantic_nav_interfaces.action import ExecuteRobotTask
+from semantic_nav_interfaces.msg import RobotFlowStatus
+from semantic_nav_interfaces.srv import NavToPoint, SetRobotMode
 
 from robot_object_retrieval_ros.srv import ImportSemanticMap
 
@@ -83,6 +88,9 @@ class RobotTaskOrchestrator(Node):
 
         self.declare_parameter("nav_service", "/nav_to_point")
         self.declare_parameter("nav_timeout_s", 180.0)
+        self.declare_parameter("robot_flow_action", "/robot_flow/execute")
+        self.declare_parameter("robot_flow_server_timeout_s", 5.0)
+        self.declare_parameter("prefer_robot_flow", True)
 
         self.declare_parameter("vision_trigger_service", "/grounding_dino/detect_once")
         self.declare_parameter("objects_json_topic", "/grounding_dino/objects_3d_json")
@@ -127,6 +135,11 @@ class RobotTaskOrchestrator(Node):
 
         self.nav_service = str(p("nav_service").value)
         self.nav_timeout_s = float(p("nav_timeout_s").value)
+        self.robot_flow_action = str(p("robot_flow_action").value)
+        self.robot_flow_server_timeout_s = float(
+            p("robot_flow_server_timeout_s").value
+        )
+        self.prefer_robot_flow = bool(p("prefer_robot_flow").value)
 
         self.vision_trigger_service = str(p("vision_trigger_service").value)
         self.objects_json_topic = str(p("objects_json_topic").value)
@@ -178,6 +191,9 @@ class RobotTaskOrchestrator(Node):
 
         self.auto_thread: Optional[threading.Thread] = None
         self.auto_timer: Optional[threading.Timer] = None
+        self._active_flow_goal = None
+        self._active_flow_lock = threading.Lock()
+        self._mapping_task_id = ""
 
         # ============================================================
         # ROS clients / subscribers / services
@@ -188,6 +204,22 @@ class RobotTaskOrchestrator(Node):
             NavToPoint,
             self.nav_service,
             callback_group=self.cbg,
+        )
+        self.flow_client = ActionClient(
+            self,
+            ExecuteRobotTask,
+            self.robot_flow_action,
+            callback_group=self.cbg,
+        )
+        self.mode_client = self.create_client(
+            SetRobotMode,
+            "/robot_mode/set",
+            callback_group=self.cbg,
+        )
+        self.flow_status_pub = self.create_publisher(
+            RobotFlowStatus,
+            "/robot_flow/status",
+            20,
         )
 
         self.vision_client = self.create_client(
@@ -411,6 +443,11 @@ class RobotTaskOrchestrator(Node):
         request: Trigger.Request,
         response: Trigger.Response,
     ) -> Trigger.Response:
+        mode_ok, mode_msg = self._ensure_mapping_mode()
+        if not mode_ok:
+            response.success = False
+            response.message = mode_msg
+            return response
         with self.lock:
             if self.running:
                 response.success = False
@@ -445,6 +482,11 @@ class RobotTaskOrchestrator(Node):
         request: Trigger.Request,
         response: Trigger.Response,
     ) -> Trigger.Response:
+        mode_ok, mode_msg = self._ensure_mapping_mode()
+        if not mode_ok:
+            response.success = False
+            response.message = mode_msg
+            return response
         with self.lock:
             if self.running:
                 response.success = False
@@ -475,10 +517,15 @@ class RobotTaskOrchestrator(Node):
         response: Trigger.Response,
     ) -> Trigger.Response:
         self.stop_requested = True
-        response.success = True
+        cancel_ok = self._cancel_active_flow_goal()
+        self._publish_mapping_status(
+            "CANCELED", "STOPPED", 1.0, False, "Mapping stop requested"
+        )
+        response.success = cancel_ok
         response.message = (
-            "Stop requested. If navigation is currently blocking, "
-            "it will stop after current waypoint finishes."
+            "Stop requested and underlying Robot Flow cancellation requested."
+            if cancel_ok
+            else "Stop requested, but underlying Robot Flow cancellation failed."
         )
         return response
 
@@ -666,6 +713,7 @@ class RobotTaskOrchestrator(Node):
 
             self.running = True
             self.stop_requested = False
+            self._mapping_task_id = str(uuid.uuid4())
 
         self.auto_thread = threading.Thread(target=self.auto_loop, daemon=True)
         self.auto_thread.start()
@@ -739,6 +787,14 @@ class RobotTaskOrchestrator(Node):
             f"[MAIN_POLICY] waypoint {index + 1}/{len(self.waypoints)} "
             f"id={wp_id}, x={x:.3f}, y={y:.3f}, yaw={yaw:.3f}"
         )
+        self._publish_mapping_status(
+            "LOADING_WAYPOINT",
+            f"WAYPOINT_{index + 1}",
+            index / max(1, len(self.waypoints)),
+            True,
+            f"Loading waypoint {wp_id}",
+            {"waypoint_id": wp_id, "index": index},
+        )
 
         nav_req = NavToPoint.Request()
         nav_req.x = x
@@ -773,10 +829,18 @@ class RobotTaskOrchestrator(Node):
 
         time.sleep(self.pause_after_nav_s)
 
+        self._publish_mapping_status(
+            "WAITING_VISION", "WAITING_DETECT_ONCE", 0.7, True,
+            "Waiting for vision", {"waypoint_id": wp_id},
+        )
         vision_ok, vision_summary, objects_raw = self._run_vision_once()
 
         map_confirm_msg = ""
         if self.enable_map_confirm:
+            self._publish_mapping_status(
+                "UPDATING_SEMANTIC_MAP", "MAP_CONFIRM", 0.9, True,
+                "Updating semantic map", {"waypoint_id": wp_id},
+            )
             confirm_ok, confirm_msg = self._call_map_confirm()
             map_confirm_msg = f" map_confirm={confirm_ok}: {confirm_msg}"
 
@@ -810,12 +874,32 @@ class RobotTaskOrchestrator(Node):
         )
 
         self.last_message = msg
+        next_state = (
+            "SUCCEEDED"
+            if self.current_index >= len(self.waypoints)
+            else "NEXT_WAYPOINT"
+        )
+        self._publish_mapping_status(
+            next_state,
+            "WAYPOINT_COMPLETE",
+            self.current_index / max(1, len(self.waypoints)),
+            self.current_index < len(self.waypoints),
+            msg,
+            {"waypoint_id": wp_id, "vision_success": vision_ok},
+        )
         return vision_ok, msg
 
     # ============================================================
     # Nav helper
     # ============================================================
     def _call_nav_to_point(self, nav_req: NavToPoint.Request):
+        if self.prefer_robot_flow:
+            flow_result = self._call_robot_flow_nav(nav_req)
+            if flow_result is not None:
+                return flow_result
+            self.get_logger().warn(
+                f"{self.robot_flow_action} unavailable; falling back to {self.nav_service}"
+            )
         if not self.nav_client.wait_for_service(timeout_sec=5.0):
             return False, "/nav_to_point service not available", None
 
@@ -840,6 +924,109 @@ class RobotTaskOrchestrator(Node):
         res = future.result()
         return bool(res.success), str(res.message), res
 
+    def _call_robot_flow_nav(self, nav_req: NavToPoint.Request):
+        if not self.flow_client.wait_for_server(
+            timeout_sec=self.robot_flow_server_timeout_s
+        ):
+            return None
+        goal = ExecuteRobotTask.Goal()
+        goal.task_type = "navigate"
+        goal.json_payload = json.dumps(
+            {
+                "x": float(nav_req.x),
+                "y": float(nav_req.y),
+                "yaw": float(nav_req.yaw),
+                "frame_id": "map",
+                "_requester_mode": "BUILD_SEMANTIC_MAP",
+            },
+            allow_nan=False,
+        )
+        send_future = self.flow_client.send_goal_async(goal)
+        deadline = time.monotonic() + self.robot_flow_server_timeout_s
+        while rclpy.ok() and not send_future.done():
+            if self.stop_requested or time.monotonic() >= deadline:
+                return False, "robot flow goal acceptance timeout/canceled", None
+            time.sleep(0.02)
+        handle = send_future.result()
+        if handle is None or not handle.accepted:
+            return False, "robot flow goal rejected", None
+        with self._active_flow_lock:
+            self._active_flow_goal = handle
+        result_future = handle.get_result_async()
+        deadline = time.monotonic() + self.nav_timeout_s
+        while rclpy.ok() and not result_future.done():
+            if self.stop_requested:
+                handle.cancel_goal_async()
+            if time.monotonic() >= deadline:
+                handle.cancel_goal_async()
+                with self._active_flow_lock:
+                    self._active_flow_goal = None
+                return False, "robot flow navigation timeout", None
+            time.sleep(0.02)
+        with self._active_flow_lock:
+            self._active_flow_goal = None
+        wrapped = result_future.result()
+        if wrapped is None:
+            return False, "robot flow result unavailable", None
+        result = wrapped.result
+        detail = {}
+        try:
+            detail = json.loads(result.json_result or "{}")
+        except json.JSONDecodeError:
+            pass
+        pose = detail.get("current_pose", {})
+        compat = SimpleNamespace(
+            final_x=float(pose.get("x", nav_req.x)),
+            final_y=float(pose.get("y", nav_req.y)),
+            final_yaw=float(pose.get("yaw", nav_req.yaw)),
+        )
+        return bool(result.success), str(result.message), compat
+
+    def _cancel_active_flow_goal(self) -> bool:
+        with self._active_flow_lock:
+            handle = self._active_flow_goal
+        if handle is None:
+            return True
+        try:
+            future = handle.cancel_goal_async()
+            deadline = time.monotonic() + 5.0
+            while not future.done() and time.monotonic() < deadline:
+                time.sleep(0.02)
+            return bool(future.done() and future.result().goals_canceling)
+        except Exception as exc:
+            self.get_logger().error(f"Robot Flow cancel failed: {exc}")
+            return False
+
+    def _ensure_mapping_mode(self) -> Tuple[bool, str]:
+        if not self.mode_client.wait_for_service(timeout_sec=2.0):
+            return False, "/robot_mode/set service not available"
+        request = SetRobotMode.Request()
+        request.mode = "BUILD_SEMANTIC_MAP"
+        future = self.mode_client.call_async(request)
+        deadline = time.monotonic() + 5.0
+        while not future.done() and time.monotonic() < deadline:
+            time.sleep(0.02)
+        if not future.done() or future.result() is None:
+            return False, "mode change timeout"
+        response = future.result()
+        return bool(response.success), str(response.message)
+
+    def _publish_mapping_status(
+        self, state, step, progress, busy, message, detail=None
+    ) -> None:
+        msg = RobotFlowStatus()
+        msg.stamp = self.get_clock().now().to_msg()
+        msg.task_id = self._mapping_task_id
+        msg.mode = "BUILD_SEMANTIC_MAP"
+        msg.task_type = "semantic_mapping"
+        msg.state = state
+        msg.step = step
+        msg.progress = float(progress)
+        msg.busy = bool(busy)
+        msg.message = str(message)
+        msg.json_detail = json.dumps(detail or {}, ensure_ascii=False, allow_nan=False)
+        self.flow_status_pub.publish(msg)
+
     # ============================================================
     # Vision helper
     # ============================================================
@@ -853,6 +1040,10 @@ class RobotTaskOrchestrator(Node):
             old_stamp = self._latest_objects_stamp
 
         self.get_logger().info("[MAIN_POLICY] trigger vision detect_once")
+        self._publish_mapping_status(
+            "DETECTING_OBJECTS", "DETECT_ONCE", 0.8, True,
+            "Detecting objects",
+        )
 
         future = self.vision_client.call_async(Trigger.Request())
 
@@ -1233,6 +1424,7 @@ class RobotTaskOrchestrator(Node):
     # ============================================================
     def destroy_node(self):
         self.stop_requested = True
+        self._cancel_active_flow_goal()
 
         if self.auto_timer is not None:
             try:

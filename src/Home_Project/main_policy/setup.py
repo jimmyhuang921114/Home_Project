@@ -32,6 +32,11 @@ setup(
             'nav_service_node = main_policy.nav_service_node:main',
             'sementic_map_node = main_policy.sementic_map_node:main',
             'robot_task_orchestrator_node = main_policy.robot_task_orchestrator_node:main',
+            'robot_mode_manager = main_policy.robot_mode_manager_node:main',
+            'robot_task_executor = main_policy.robot_task_executor_node:main',
+            'robot_state = main_policy.robot_state_node:main',
+            'robot_api_server = main_policy.robot_api_server_node:main',
+            'mock_motion_servers = main_policy.mock_motion_servers_node:main',
         ],
     },
 )

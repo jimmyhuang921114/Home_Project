@@ -436,7 +436,7 @@ class HFGroundingDINOMultiFrameTiledNode(Node):
 
     def load_model(self):
         self.get_logger().info("Loading Hugging Face GroundingDINO model...")
-        self.processor = AutoProcessor.from_pretrained(self.hf_model_name)
+        self.processor = AutoProcessor.from_pretrained(self.hf_model_name, local_files_only=True)
         self.model = AutoModelForZeroShotObjectDetection.from_pretrained(
             self.hf_model_name
         ).to(self.device)

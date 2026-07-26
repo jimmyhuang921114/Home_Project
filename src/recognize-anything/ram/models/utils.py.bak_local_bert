@@ -128,7 +128,7 @@ class GroupWiseLinear(nn.Module):
 
 
 def init_tokenizer(text_encoder_type='bert-base-uncased'):
-    tokenizer = BertTokenizer.from_pretrained("models/hf/bert-base-uncased", local_files_only=True)
+    tokenizer = BertTokenizer.from_pretrained(text_encoder_type)
     tokenizer.add_special_tokens({'bos_token': '[DEC]'})
     tokenizer.add_special_tokens({'additional_special_tokens': ['[ENC]']})
     enc_token_id = tokenizer.convert_tokens_to_ids("[ENC]")
