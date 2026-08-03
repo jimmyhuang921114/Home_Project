@@ -1,0 +1,17 @@
+string detection_id
+string mask_id
+string label
+string original_label
+float32 confidence
+int32[4] bbox
+string mask_encoding
+string mask_data
+string mask_origin
+uint32 image_width
+uint32 image_height
+string classification_status
+bool classification_verified
+string model_source
+string attributes_json
+string room_hint
+builtin_interfaces/Time capture_stamp

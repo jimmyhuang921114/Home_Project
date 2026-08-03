@@ -1,0 +1,8 @@
+schema_version: "1.0"
+interface_package_version: "0.1.0"
+source_repository: Home_Project
+action_file: src/Home_Project/semantic_nav_interfaces/action/DetectSemanticObjects.action
+message_file: src/Home_Project/semantic_nav_interfaces/msg/SemanticDetection2D.msg
+action_sha256: 4672cfeb5407ca2e8c75a209747d8640de0629e611bea21c1eb654cb33a7088d
+message_sha256: 05fcc8f755ab33285d089a3f9fd6a617514ac3a9ab1b4cf7e077cde2233ce45e
+generated_at: "2026-08-04T01:04:18+08:00"

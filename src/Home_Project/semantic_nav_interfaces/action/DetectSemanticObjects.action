@@ -1,0 +1,28 @@
+sensor_msgs/CompressedImage image
+string request_id
+builtin_interfaces/Time capture_stamp
+string capture_frame_id
+string verification_mode
+float32 ram_threshold
+float32 grounding_box_threshold
+float32 grounding_text_threshold
+float32 vlm_confidence_threshold
+uint32 max_detections
+---
+bool success
+string error_code
+string error_message
+string request_id
+builtin_interfaces/Time capture_stamp
+string capture_frame_id
+uint32 image_width
+uint32 image_height
+semantic_nav_interfaces/SemanticDetection2D[] detections
+float32 total_latency_ms
+string stage_timings_json
+string model_metadata_json
+---
+string request_id
+string current_stage
+float32 elapsed_time_ms
+string state
