@@ -39,12 +39,22 @@ ENV XDG_RUNTIME_DIR=/tmp/runtime-${USERNAME}
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility,graphics,display
 
+# ------------------------------------------------------------
+# ROS 2 + Cyclone DDS defaults
+#
+# run_env.sh can override ROS_DOMAIN_ID.
+# ------------------------------------------------------------
+
 ENV ROS_DISTRO=${ROS_DISTRO}
+ENV ROS_DOMAIN_ID=40
+ENV ROS_LOCALHOST_ONLY=0
 ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+ENV CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds.xml
 
 # ------------------------------------------------------------
 # Basic Ubuntu packages + GUI + DB client
 # ------------------------------------------------------------
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     locales \
     tzdata \
@@ -65,9 +75,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     x11-apps \
     mesa-utils \
+    iproute2 \
     iputils-ping \
     net-tools \
     dnsutils \
+    procps \
+    psmisc \
     postgresql-client \
     libpq-dev \
     python3 \
@@ -112,17 +125,29 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ------------------------------------------------------------
 # Add ROS 2 apt source
 # ------------------------------------------------------------
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates \
-    && export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F'"' '{print $4}') \
-    && curl -fsSL -o /tmp/ros2-apt-source.deb \
-        "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo ${UBUNTU_CODENAME:-${VERSION_CODENAME}})_all.deb" \
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        curl \
+        ca-certificates \
+    && export ROS_APT_SOURCE_VERSION="$( \
+        curl -fsSL \
+        https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest \
+        | grep -F '"tag_name"' \
+        | awk -F'"' '{print $4}' \
+    )" \
+    && test -n "${ROS_APT_SOURCE_VERSION}" \
+    && curl -fsSL \
+        -o /tmp/ros2-apt-source.deb \
+        "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo "${UBUNTU_CODENAME:-${VERSION_CODENAME}}")_all.deb" \
     && dpkg -i /tmp/ros2-apt-source.deb \
-    && rm /tmp/ros2-apt-source.deb \
+    && rm -f /tmp/ros2-apt-source.deb \
     && rm -rf /var/lib/apt/lists/*
 
 # ------------------------------------------------------------
-# Install ROS 2 Humble + Nav2
+# Install ROS 2 Humble + Nav2 + Cyclone DDS
 # ------------------------------------------------------------
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-${ROS_INSTALL} \
     ros-${ROS_DISTRO}-cv-bridge \
@@ -180,27 +205,82 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # ------------------------------------------------------------
+# Default Cyclone DDS configuration
+#
+# run_env.sh mounts the Host configuration over this file.
+# ------------------------------------------------------------
+
+RUN mkdir -p /etc/cyclonedds && \
+    cat > /etc/cyclonedds/cyclonedds.xml <<'XML_EOF'
+<?xml version="1.0" encoding="UTF-8"?>
+
+<CycloneDDS xmlns="https://cdds.io/config">
+  <Domain Id="any">
+
+    <General>
+      <Interfaces>
+        <NetworkInterface autodetermine="true"/>
+      </Interfaces>
+
+      <!--
+        Enable multicast discovery.
+
+        With Docker --network=host, Cyclone DDS uses the Host
+        Ethernet or Wi-Fi interface directly.
+      -->
+      <AllowMulticast>true</AllowMulticast>
+    </General>
+
+    <Discovery>
+      <ParticipantIndex>auto</ParticipantIndex>
+      <MaxAutoParticipantIndex>120</MaxAutoParticipantIndex>
+    </Discovery>
+
+    <Tracing>
+      <Verbosity>warning</Verbosity>
+      <OutputFile>stderr</OutputFile>
+    </Tracing>
+
+  </Domain>
+</CycloneDDS>
+XML_EOF
+
+RUN chmod 0644 /etc/cyclonedds/cyclonedds.xml
+
+# ------------------------------------------------------------
 # rosdep
 # ------------------------------------------------------------
-RUN rosdep init || true \
-    && rosdep update --rosdistro ${ROS_DISTRO}
+
+RUN rosdep init || true && \
+    rosdep update --rosdistro ${ROS_DISTRO} || true
 
 # ------------------------------------------------------------
 # Python base
 # ------------------------------------------------------------
-RUN python3 -m pip install --upgrade pip setuptools wheel \
-    && python3 -m pip install backports.tarfile
+
+RUN python3 -m pip install \
+    --upgrade \
+    pip \
+    setuptools \
+    wheel \
+    && python3 -m pip install \
+        backports.tarfile
 
 # ------------------------------------------------------------
 # CUDA 12.8 PyTorch
 # ------------------------------------------------------------
-RUN python3 -m pip install --ignore-installed \
-    torch torchvision torchaudio \
+
+RUN python3 -m pip install \
+    --ignore-installed \
+    torch \
+    torchvision \
+    torchaudio \
     --index-url https://download.pytorch.org/whl/cu128
 
 # ------------------------------------------------------------
 # Python AI + robot_object_retrieval dependencies
 # ------------------------------------------------------------
+
 RUN python3 -m pip install \
     "numpy==${NUMPY_VERSION}" \
     "transformers==${TRANSFORMERS_VERSION}" \
@@ -234,19 +314,26 @@ RUN python3 -m pip install \
     pydantic \
     textual \
     rich \
-    psycopg[binary] \
+    "psycopg[binary]" \
     pgvector \
     sqlalchemy \
     asyncpg \
     httpx \
     ollama
 
+# ------------------------------------------------------------
 # YOLO / supervision without forcing pip OpenCV
-RUN python3 -m pip install --no-deps \
+# ------------------------------------------------------------
+
+RUN python3 -m pip install \
+    --no-deps \
     ultralytics \
     supervision
 
+# ------------------------------------------------------------
 # Optional pip OpenCV
+# ------------------------------------------------------------
+
 RUN if [[ "${INSTALL_PIP_OPENCV}" == "1" ]]; then \
         python3 -m pip install opencv-python ; \
     fi
@@ -254,33 +341,46 @@ RUN if [[ "${INSTALL_PIP_OPENCV}" == "1" ]]; then \
 # ------------------------------------------------------------
 # RAM / Transformers compatibility patch helper
 # ------------------------------------------------------------
-RUN cat > /usr/local/bin/patch_ram_bert_compat.py <<'PY'
+
+RUN cat > /usr/local/bin/patch_ram_bert_compat.py <<'PY_EOF'
 #!/usr/bin/env python3
+
 from pathlib import Path
 import sys
 
+
 def patch_repo(repo: Path) -> bool:
     bert = repo / "ram" / "models" / "bert.py"
+
     if not bert.exists():
         return False
 
     text = bert.read_text()
     original = text
 
-    bak = bert.with_suffix(".py.bak_transformers_compat")
-    if not bak.exists():
-        bak.write_text(text)
+    backup = bert.with_suffix(".py.bak_transformers_compat")
 
-    if "all_tied_weights_keys = []  # docker transformers compatibility patch" not in text:
+    if not backup.exists():
+        backup.write_text(text)
+
+    marker = (
+        "all_tied_weights_keys = []  "
+        "# docker transformers compatibility patch"
+    )
+
+    if marker not in text:
         needle = "class BertPreTrainedModel(PreTrainedModel):\n"
+
         if needle in text:
             insert = (
                 needle
                 + "    # docker transformers compatibility patch\n"
-                + "    # Newer transformers PreTrainedModel.tie_weights() may expect this attr.\n"
-                + "    all_tied_weights_keys = []  # docker transformers compatibility patch\n"
+                + "    # Newer transformers may expect these attributes.\n"
+                + "    all_tied_weights_keys = []  "
+                + "# docker transformers compatibility patch\n"
                 + "    _tied_weights_keys = []\n"
             )
+
             text = text.replace(needle, insert, 1)
 
     bottom_patch = """
@@ -291,6 +391,7 @@ try:
 except NameError:
     pass
 """
+
     if "BertModel.all_tied_weights_keys = []" not in text:
         text += bottom_patch
 
@@ -302,8 +403,13 @@ except NameError:
 
     return True
 
-def main():
-    candidates = [Path(p) for p in sys.argv[1:] if p]
+
+def main() -> None:
+    candidates = [
+        Path(path)
+        for path in sys.argv[1:]
+        if path
+    ]
 
     candidates += [
         Path("/workspace/work_ws/src/recognize-anything"),
@@ -315,33 +421,51 @@ def main():
     seen = set()
     found = False
 
-    for c in candidates:
-        c = c.expanduser()
-        if str(c) in seen:
+    for candidate in candidates:
+        candidate = candidate.expanduser()
+
+        if str(candidate) in seen:
             continue
-        seen.add(str(c))
+
+        seen.add(str(candidate))
 
         try:
-            if patch_repo(c):
+            if patch_repo(candidate):
                 found = True
-        except Exception as e:
-            print(f"[patch_ram_bert_compat] warning: failed to patch {c}: {e}")
+        except Exception as exc:
+            print(
+                "[patch_ram_bert_compat] warning: "
+                f"failed to patch {candidate}: {exc}"
+            )
 
     if not found:
-        print("[patch_ram_bert_compat] no recognize-anything repo found; skip")
+        print(
+            "[patch_ram_bert_compat] "
+            "no recognize-anything repo found; skip"
+        )
+
 
 if __name__ == "__main__":
     main()
-PY
+PY_EOF
 
 RUN chmod +x /usr/local/bin/patch_ram_bert_compat.py
 
 # ------------------------------------------------------------
 # Entrypoint
 # ------------------------------------------------------------
-RUN cat > /usr/local/bin/vision_entrypoint.sh <<'SH'
+
+RUN cat > /usr/local/bin/vision_entrypoint.sh <<'ENTRYPOINT_EOF'
 #!/usr/bin/env bash
 set -e
+
+mkdir -p \
+    "${XDG_RUNTIME_DIR:-/tmp/runtime-work}" \
+    "${HF_HOME:-/workspace/.cache/huggingface}"
+
+chmod 700 \
+    "${XDG_RUNTIME_DIR:-/tmp/runtime-work}" \
+    2>/dev/null || true
 
 if command -v python3 >/dev/null 2>&1; then
     python3 /usr/local/bin/patch_ram_bert_compat.py \
@@ -349,7 +473,8 @@ if command -v python3 >/dev/null 2>&1; then
         "/workspace/work_ws/src/recognize-anything" \
         "/workspace/src/recognize-anything" \
         "/home/jimmy/work_ws/visual/src/recognize-anything" \
-        "/home/work/work_ws/visual/src/recognize-anything" || true
+        "/home/work/work_ws/visual/src/recognize-anything" \
+        || true
 fi
 
 if [ -f "/opt/ros/${ROS_DISTRO}/setup.bash" ]; then
@@ -364,14 +489,25 @@ if [ -f "/home/jimmy/work_ws/visual/install/setup.bash" ]; then
     source "/home/jimmy/work_ws/visual/install/setup.bash"
 fi
 
+export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-40}"
+export ROS_LOCALHOST_ONLY="${ROS_LOCALHOST_ONLY:-0}"
+export RMW_IMPLEMENTATION="${RMW_IMPLEMENTATION:-rmw_cyclonedds_cpp}"
+export CYCLONEDDS_URI="${CYCLONEDDS_URI:-file:///etc/cyclonedds/cyclonedds.xml}"
+
+# Avoid mixing Fast DDS settings with Cyclone DDS.
+unset FASTRTPS_DEFAULT_PROFILES_FILE
+unset FASTDDS_DEFAULT_PROFILES_FILE
+unset ROS_DISCOVERY_SERVER
+
 exec "$@"
-SH
+ENTRYPOINT_EOF
 
 RUN chmod +x /usr/local/bin/vision_entrypoint.sh
 
 # ------------------------------------------------------------
 # Create non-root user
 # ------------------------------------------------------------
+
 RUN set -eux; \
     groupadd -f render; \
     groupadd -f video; \
@@ -388,13 +524,24 @@ RUN set -eux; \
             usermod -l "${USERNAME}" "${EXISTING_USER}" || true; \
             usermod -d "/home/${USERNAME}" -m "${USERNAME}" || true; \
         else \
-            useradd -m -u "${UID}" -g "${GID}" -s /bin/bash "${USERNAME}"; \
+            useradd \
+                -m \
+                -u "${UID}" \
+                -g "${GID}" \
+                -s /bin/bash \
+                "${USERNAME}"; \
         fi; \
     fi; \
     \
-    usermod -aG sudo,video,render,dialout,plugdev "${USERNAME}"; \
-    echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${USERNAME}"; \
+    usermod \
+        -aG sudo,video,render,dialout,plugdev \
+        "${USERNAME}"; \
+    \
+    echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" \
+        > "/etc/sudoers.d/${USERNAME}"; \
+    \
     chmod 0440 "/etc/sudoers.d/${USERNAME}"; \
+    \
     mkdir -p \
         /workspace \
         /workspace/work_ws \
@@ -402,37 +549,70 @@ RUN set -eux; \
         /workspace/.cache/huggingface \
         /home/jimmy/work_ws \
         "${XDG_RUNTIME_DIR}"; \
-    chown -R "${USERNAME}:${GID}" /workspace "${XDG_RUNTIME_DIR}"; \
+    \
+    chown -R \
+        "${USERNAME}:${GID}" \
+        /workspace \
+        "${XDG_RUNTIME_DIR}"; \
+    \
     chmod 700 "${XDG_RUNTIME_DIR}"
 
 # ------------------------------------------------------------
-# Auto source ROS and workspace
+# Auto source ROS, workspace and Cyclone DDS
 # ------------------------------------------------------------
-RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> /home/${USERNAME}/.bashrc \
-    && echo "if [ -f /workspace/work_ws/install/setup.bash ]; then source /workspace/work_ws/install/setup.bash; fi" >> /home/${USERNAME}/.bashrc \
-    && echo "if [ -f /home/jimmy/work_ws/visual/install/setup.bash ]; then source /home/jimmy/work_ws/visual/install/setup.bash; fi" >> /home/${USERNAME}/.bashrc \
-    && echo "export ROS_DISTRO=${ROS_DISTRO}" >> /home/${USERNAME}/.bashrc \
-    && echo "export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp" >> /home/${USERNAME}/.bashrc \
-    && echo "export HF_HOME=/workspace/.cache/huggingface" >> /home/${USERNAME}/.bashrc \
-    && echo "export HUGGINGFACE_HUB_CACHE=/workspace/.cache/huggingface" >> /home/${USERNAME}/.bashrc \
-    && echo "export TRANSFORMERS_CACHE=/workspace/.cache/huggingface" >> /home/${USERNAME}/.bashrc \
-    && echo "export QT_X11_NO_MITSHM=1" >> /home/${USERNAME}/.bashrc \
-    && chown ${USERNAME}:${GID} /home/${USERNAME}/.bashrc
+
+RUN cat >> /home/${USERNAME}/.bashrc <<BASHRC_EOF
+
+# ROS 2 Humble
+source /opt/ros/${ROS_DISTRO}/setup.bash
+
+if [ -f /workspace/work_ws/install/setup.bash ]; then
+    source /workspace/work_ws/install/setup.bash
+fi
+
+if [ -f /home/jimmy/work_ws/visual/install/setup.bash ]; then
+    source /home/jimmy/work_ws/visual/install/setup.bash
+fi
+
+export ROS_DISTRO=${ROS_DISTRO}
+export ROS_DOMAIN_ID=\${ROS_DOMAIN_ID:-40}
+export ROS_LOCALHOST_ONLY=\${ROS_LOCALHOST_ONLY:-0}
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+export CYCLONEDDS_URI=\${CYCLONEDDS_URI:-file:///etc/cyclonedds/cyclonedds.xml}
+
+unset FASTRTPS_DEFAULT_PROFILES_FILE
+unset FASTDDS_DEFAULT_PROFILES_FILE
+unset ROS_DISCOVERY_SERVER
+
+export HF_HOME=/workspace/.cache/huggingface
+export HUGGINGFACE_HUB_CACHE=/workspace/.cache/huggingface
+export TRANSFORMERS_CACHE=/workspace/.cache/huggingface
+export QT_X11_NO_MITSHM=1
+BASHRC_EOF
+
+RUN chown \
+    ${USERNAME}:${GID} \
+    /home/${USERNAME}/.bashrc
 
 # ------------------------------------------------------------
-# Build-time checks
+# Build-time Python checks
 # ------------------------------------------------------------
+
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
-    python3 - <<'PY'
+    export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp && \
+    export CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds.xml && \
+    python3 - <<'PY_CHECK_EOF'
 import sys
-import torch
+
 import cv2
-import numpy as np
-import transformers
 import fairscale
+import numpy as np
+import torch
+import transformers
 
 from fairscale.nn.checkpoint.checkpoint_activations import checkpoint_wrapper
-from transformers import AutoProcessor, AutoModelForZeroShotObjectDetection
+from transformers import AutoModelForZeroShotObjectDetection
+from transformers import AutoProcessor
 
 print("Python:", sys.version)
 print("Torch:", torch.__version__)
@@ -445,10 +625,17 @@ print("Transformers:", transformers.__version__)
 print("FairScale:", fairscale.__version__)
 print("GroundingDINO HF import: OK")
 print("FairScale checkpoint_wrapper import: OK")
-PY
+PY_CHECK_EOF
+
+# ------------------------------------------------------------
+# Build-time ROS checks
+# ------------------------------------------------------------
 
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
+    export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp && \
+    export CYCLONEDDS_URI=file:///etc/cyclonedds/cyclonedds.xml && \
     ros2 --help > /tmp/ros2_help.txt && \
+    ros2 pkg prefix rmw_cyclonedds_cpp && \
     ros2 pkg list | grep cv_bridge && \
     ros2 pkg list | grep image_transport && \
     ros2 pkg list | grep rosbridge_suite && \
@@ -456,10 +643,13 @@ RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
     ros2 pkg list | grep nav2_bringup && \
     ros2 pkg list | grep nav2_map_server && \
     ros2 pkg list | grep nav2_amcl && \
+    test -f /etc/cyclonedds/cyclonedds.xml && \
     nvcc --version
 
 USER ${USERNAME}
+
 WORKDIR /home/jimmy/work_ws/docker
 
 ENTRYPOINT ["/usr/local/bin/vision_entrypoint.sh"]
+
 CMD ["/bin/bash"]
