@@ -81,4 +81,37 @@ Thumbs.db
 !.vscode/launch.json
 .idea/
 
+# =========================
+# Home Project local build/install output
+# These directories are reproducible and should not be committed.
+# =========================
+/build_*/
+/install_*/
+/log_*/
+/artifacts/
+/results/
+/runtime/
+/reports/
+/experiments/
+/embedding_experiments/
+/opengaussian_exp2/
+/home_project_reports/
+
+# Local model weights and downloaded checkpoints
+/models/
+
+# Captured/generated datasets and local input staging
+/datasets/
+/incoming/
+/tmp_unknown_first_cross/
+
+# Generated maps/scenes and local tool output
+/maps/
+/scenes/
+/visualization/
+
+# Editor/experiment backups
+*.bak
+*.bak[0-9]*
+*.orig
 
